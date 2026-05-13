@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_beranda"
+        android:icon="@drawable/ic_home"
+        android:title="Beranda" />
+    <item
+        android:id="@+id/nav_destinasi"
+        android:icon="@drawable/ic_location"
+        android:title="Destinasi" />
+    <item
+        android:id="@+id/nav_booking"
+        android:icon="@drawable/ic_booking"
+        android:title="Booking" />
+    <item
+        android:id="@+id/nav_artikel"
+        android:icon="@drawable/ic_article"
+        android:title="Artikel" />
+    <item
+        android:id="@+id/nav_akun"
+        android:icon="@drawable/ic_user"
+        android:title="Akun" />
+</menu>
