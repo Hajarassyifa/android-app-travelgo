@@ -113,6 +113,7 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/btnBooking"
                 android:layout_width="160dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"

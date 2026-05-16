@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="15dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless">
 
     <androidx.cardview.widget.CardView
         android:layout_width="65dp"
@@ -19,7 +22,9 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_search" /> </androidx.cardview.widget.CardView>
+            android:src="@drawable/ic_search" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/tvCategoryName"
@@ -28,5 +33,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_medium"
         android:text="Kategori"
+        android:textColor="@color/black"
         android:textSize="12sp" />
+
 </LinearLayout>

@@ -13,13 +13,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    // 1. Inisialisasi variabel View
     private lateinit var rvDestinasi: RecyclerView
     private lateinit var rvArtikel: RecyclerView
     private lateinit var bannerViewPager: ViewPager2
     private lateinit var bottomNav: BottomNavigationView
 
-    // 2. Inisialisasi Data List
     private var listWisata = ArrayList<Destinasi>()
     private var listArtikel = ArrayList<Artikel>()
 
@@ -27,13 +25,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // --- HUBUNGKAN ID DARI XML ---
         rvDestinasi = findViewById(R.id.rvDestinasi)
         rvArtikel = findViewById(R.id.rvArtikel)
         bannerViewPager = findViewById(R.id.bannerViewPager)
         bottomNav = findViewById(R.id.bottomNavigation)
 
-        // --- SETUP DATA & TAMPILAN ---
         setupBanner()
         prepareDataDestinasi()
         prepareDataArtikel()
@@ -41,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         showDestinasiHorizontal()
         showArtikelVertical()
 
-        // --- SETUP NAVIGASI & KATEGORI ---
         setupCategoryButtons()
         setupBottomNavigation()
     }
@@ -77,51 +72,58 @@ class MainActivity : AppCompatActivity() {
     private fun showArtikelVertical() {
         rvArtikel.layoutManager = LinearLayoutManager(this)
         rvArtikel.adapter = ArtikelAdapter(listArtikel)
-        rvArtikel.isNestedScrollingEnabled = false // Menghindari lag saat scroll di NestedScrollView
+        rvArtikel.isNestedScrollingEnabled = false
     }
 
     private fun setupBottomNavigation() {
-        // Logika klik Bottom Navigation Bar
         bottomNav.setOnItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
+
                 R.id.nav_beranda -> {
-                    // Sudah di Beranda, tidak perlu pindah
                     true
                 }
+
                 R.id.nav_destinasi -> {
-                    startActivity(Intent(this, SemuaDestinasi::class.java))
+                    val intent = Intent(this, SemuaDestinasi::class.java)
+                    intent.putExtra("kategori", "Semua")
+                    startActivity(intent)
                     true
                 }
+
+                R.id.nav_booking -> {
+                    val intent = Intent(this, MyTicketActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
                 R.id.nav_artikel -> {
-                    // Opsional: pindah ke activity artikel jika ada
                     true
                 }
+
                 R.id.nav_akun -> {
-                    // Opsional: pindah ke ProfileActivity
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
 
-        // Mengatur agar icon Beranda terpilih secara default
         bottomNav.selectedItemId = R.id.nav_beranda
     }
 
     private fun setupCategoryButtons() {
         fun initCategory(id: Int, name: String, iconRes: Int, categoryFilter: String) {
             val layout = findViewById<LinearLayout>(id)
-            layout?.let {
-                it.findViewById<TextView>(R.id.tvCategoryName).text = name
-                it.findViewById<ImageView>(R.id.imgCategory).setImageResource(iconRes)
 
-                it.setOnClickListener {
-                    if (categoryFilter == "Semua") {
-                        startActivity(Intent(this, SemuaDestinasi::class.java))
-                    } else {
-                        // Logika filter data listWisata berdasarkan kategori
-                    }
-                }
+            layout.findViewById<TextView>(R.id.tvCategoryName).text = name
+            layout.findViewById<ImageView>(R.id.imgCategory).setImageResource(iconRes)
+
+            layout.setOnClickListener {
+                val intent = Intent(this, SemuaDestinasi::class.java)
+                intent.putExtra("kategori", categoryFilter)
+                startActivity(intent)
             }
         }
 
