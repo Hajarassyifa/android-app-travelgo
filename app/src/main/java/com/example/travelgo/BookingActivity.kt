@@ -28,6 +28,9 @@ class BookingActivity : AppCompatActivity() {
     private lateinit var tvTotalHarga: TextView
     private lateinit var btnLanjutPembayaran: Button
 
+    private lateinit var tvNamaPemesan: TextView
+
+    private var namaPemesan = ""
     private var namaDestinasi = ""
     private var lokasiDestinasi = ""
     private var hargaText = ""
@@ -55,6 +58,7 @@ class BookingActivity : AppCompatActivity() {
 
         updateJumlahOrangUI()
         updateTotalHarga()
+
 
         btnLanjutPembayaran.setOnClickListener {
 
@@ -85,6 +89,11 @@ class BookingActivity : AppCompatActivity() {
 
             val detailIntent =
                 Intent(this, DetailBookingActivity::class.java)
+
+            detailIntent.putExtra(
+                "NAMA_PEMESAN",
+                namaPemesan
+            )
 
             detailIntent.putExtra(
                 "NAMA_DESTINASI",
@@ -172,7 +181,10 @@ class BookingActivity : AppCompatActivity() {
 
         btnLanjutPembayaran =
             findViewById(R.id.btnLanjutPembayaran)
+
+        tvNamaPemesan = findViewById(R.id.tvNamaPemesan)
     }
+
 
     private fun getIntentData() {
 
@@ -193,6 +205,9 @@ class BookingActivity : AppCompatActivity() {
                 "GAMBAR_DESTINASI",
                 R.drawable.img_onboarding1
             )
+        val userPref = getSharedPreferences("USER_DATA", MODE_PRIVATE)
+        namaPemesan = userPref.getString("NAMA", "Traveler") ?: "Traveler"
+        tvNamaPemesan.text = namaPemesan
     }
 
     private fun setupTanggal() {

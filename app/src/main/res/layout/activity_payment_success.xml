@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <!-- ICON SUCCESS -->
         <LinearLayout
             android:layout_width="130dp"
             android:layout_height="130dp"
@@ -23,9 +24,12 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:src="@drawable/ic_success"
+                android:contentDescription="@null"
                 app:tint="#10B981" />
+
         </LinearLayout>
 
+        <!-- TITLE -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +39,7 @@
             android:textColor="@color/black"
             android:textSize="26sp" />
 
+        <!-- DESC -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,6 +49,7 @@
             android:textColor="#6B7280"
             android:textSize="15sp" />
 
+        <!-- BOOKING CODE -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="95dp"
@@ -64,18 +70,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
-                android:text="TRV123456789"
+                android:text="-"
                 android:textColor="#10B981"
                 android:textSize="24sp" />
+
         </LinearLayout>
 
+        <!-- DETAIL CARD -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="22dp"
-            app:cardElevation="5dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,6 +91,7 @@
                 android:orientation="vertical"
                 android:padding="18dp">
 
+                <!-- STATUS -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,6 +107,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tvStatusBooking"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_icon_succsess"
@@ -107,6 +117,7 @@
                         android:text="Sudah Dibayar"
                         android:textColor="#10B981"
                         android:textSize="14sp" />
+
                 </LinearLayout>
 
                 <View
@@ -115,6 +126,7 @@
                     android:layout_marginVertical="14dp"
                     android:background="#EEEEEE" />
 
+                <!-- TOTAL -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -130,17 +142,21 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tvTotalPembayaran"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="Rp 2.500.000"
+                        android:text="-"
                         android:textColor="@color/black"
                         android:textSize="17sp" />
+
                 </LinearLayout>
 
             </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
+        <!-- BUTTON DETAIL -->
         <Button
             android:id="@+id/btnLihatDetailBooking"
             android:layout_width="match_parent"
@@ -153,6 +169,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
+        <!-- BUTTON HOME -->
         <Button
             android:id="@+id/btnKembaliBeranda"
             android:layout_width="match_parent"

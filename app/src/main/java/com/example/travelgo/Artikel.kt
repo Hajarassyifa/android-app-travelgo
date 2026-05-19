@@ -5,5 +5,7 @@ data class Artikel(
     val judul: String,
     val kategori: String,
     val waktuBaca: String,
-    val gambar: Int
+    val tanggal: String,
+    val gambar: Int,
+    val isi: String
 )

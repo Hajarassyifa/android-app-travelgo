@@ -1,60 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="12dp">
+    android:layout_marginBottom="14dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="105dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingBottom="12dp">
+        android:padding="12dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="100dp"
-            android:layout_height="85dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp">
-            <ImageView
-                android:id="@+id/imgArtikel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_onboarding1" />
-        </com.google.android.material.card.MaterialCardView>
+        <ImageView
+            android:id="@+id/imgArtikel"
+            android:layout_width="95dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_onboarding1" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/tvJudulArtikel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Judul Artikel"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:maxLines="2" />
-
-            <TextView
-                android:id="@+id/tvInfoArtikel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Kategori • 5 menit baca"
-                android:textColor="#888888"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Tips Traveling ke Bali"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvKategoriArtikel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Tips • 5 menit baca"
+                android:textColor="#6B7280"
                 android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvTanggalArtikel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="19 Mei 2026"
+                android:textColor="#6B7280"
+                android:textSize="12sp" />
         </LinearLayout>
+
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EEEEEE" />
-</LinearLayout>
+</androidx.cardview.widget.CardView>

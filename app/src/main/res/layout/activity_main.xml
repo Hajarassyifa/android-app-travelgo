@@ -41,6 +41,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/tvSapaan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
@@ -48,7 +49,6 @@
             android:text="Halo, Traveler! 👋"
             android:textColor="@color/black"
             android:textSize="20sp" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +58,7 @@
             android:textSize="18sp" />
 
         <EditText
+            android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="20dp"

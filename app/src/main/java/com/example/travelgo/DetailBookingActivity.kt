@@ -29,6 +29,8 @@ class DetailBookingActivity : AppCompatActivity() {
     private lateinit var tvPaymentNote: TextView
     private lateinit var tvKodeBooking: TextView
 
+    private lateinit var tvNamaPemesan: TextView
+
     private var totalHarga = 0
     private var paymentStatus = "Menunggu Pembayaran"
     private var kodeBooking = ""
@@ -61,9 +63,14 @@ class DetailBookingActivity : AppCompatActivity() {
         tvMetodePembayaran = findViewById(R.id.tvMetodePembayaran)
         tvPaymentNote = findViewById(R.id.tvPaymentNote)
         tvKodeBooking = findViewById(R.id.tvKodeBooking)
+        tvNamaPemesan = findViewById(R.id.tvNamaPemesan)
     }
 
     private fun ambilDataIntent() {
+        val namaPemesan =
+            intent.getStringExtra("NAMA_PEMESAN") ?: "Traveler"
+
+        tvNamaPemesan.text = namaPemesan
         val namaDestinasi =
             intent.getStringExtra("NAMA_DESTINASI") ?: "Destinasi"
 
@@ -89,10 +96,10 @@ class DetailBookingActivity : AppCompatActivity() {
             intent.getStringExtra("PAYMENT_STATUS") ?: "Menunggu Pembayaran"
 
         kodeBooking =
-            intent.getStringExtra("KODE_BOOKING") ?: generateKodeBooking()
+            intent.getStringExtra("KODE_BOOKING") ?: "-"
 
         tokenTiket =
-            intent.getStringExtra("TOKEN_TIKET") ?: generateTokenTiket()
+            intent.getStringExtra("TOKEN_TIKET") ?: "-"
 
         metodePembayaran =
             intent.getStringExtra("METODE_PEMBAYARAN") ?: "Belum Dibayar"
@@ -147,6 +154,8 @@ class DetailBookingActivity : AppCompatActivity() {
             paymentIntent.putExtra("KODE_BOOKING", kodeBooking)
             paymentIntent.putExtra("TOKEN_TIKET", tokenTiket)
 
+
+
             startActivity(paymentIntent)
         }
     }
@@ -154,15 +163,5 @@ class DetailBookingActivity : AppCompatActivity() {
     private fun formatRupiah(value: Int): String {
         val formatRupiah = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
         return formatRupiah.format(value).replace(",00", "")
-    }
-
-    private fun generateKodeBooking(): String {
-        val random = (100000000..999999999).random()
-        return "TRV$random"
-    }
-
-    private fun generateTokenTiket(): String {
-        val random = (100000..999999).random()
-        return "TKT-$random"
     }
 }

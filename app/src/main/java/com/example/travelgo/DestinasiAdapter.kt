@@ -45,4 +45,10 @@ class DestinasiAdapter(private val listDestinasi: List<Destinasi>) :
     }
 
     override fun getItemCount(): Int = listDestinasi.size
+
+    companion object {
+        fun notifyDataSetChanged() {
+            TODO("Not yet implemented")
+        }
+    }
 }

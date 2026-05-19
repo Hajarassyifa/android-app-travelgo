@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import java.text.NumberFormat
 import java.util.Locale
+import android.content.Intent
+import android.view.View
+import androidx.cardview.widget.CardView
 
 class MyTicketActivity : AppCompatActivity() {
 
@@ -19,6 +22,9 @@ class MyTicketActivity : AppCompatActivity() {
     private lateinit var tvStatusPembayaran: TextView
     private lateinit var tvBarcode: TextView
     private lateinit var tvToken: TextView
+    private lateinit var tvNamaPemesan: TextView
+    private lateinit var layoutEmptyTicket: LinearLayout
+    private lateinit var cardTicket: CardView
 
     private var kodeBooking = ""
     private var tokenTiket = ""
@@ -35,23 +41,84 @@ class MyTicketActivity : AppCompatActivity() {
         tvStatusPembayaran = findViewById(R.id.tvStatusPembayaran)
         tvBarcode = findViewById(R.id.tvBarcode)
         tvToken = findViewById(R.id.tvToken)
+        tvNamaPemesan = findViewById(R.id.tvNamaPemesan)
+        layoutEmptyTicket = findViewById(R.id.layoutEmptyTicket)
+        cardTicket = findViewById(R.id.cardTicket)
 
         btnBack.setOnClickListener {
+
+            val intent =
+                Intent(this, MainActivity::class.java)
+
+            intent.flags =
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_NEW_TASK
+
+            startActivity(intent)
             finish()
         }
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@MyTicketActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            }
+        })
 
-        val nama = intent.getStringExtra("NAMA_DESTINASI") ?: "Destinasi"
-        val lokasi = intent.getStringExtra("LOKASI_DESTINASI") ?: "Indonesia"
-        val gambar = intent.getIntExtra("GAMBAR_DESTINASI", R.drawable.img_onboarding1)
-        val tanggalBerangkat = intent.getStringExtra("TANGGAL_BERANGKAT") ?: "-"
-        val tanggalKembali = intent.getStringExtra("TANGGAL_KEMBALI") ?: "-"
-        val jumlahOrang = intent.getIntExtra("JUMLAH_ORANG", 1)
-        val totalHarga = intent.getIntExtra("TOTAL_HARGA", 0)
-        val status = intent.getStringExtra("PAYMENT_STATUS") ?: "Sudah Dibayar"
+        val pref =
+            getSharedPreferences("LAST_TICKET", MODE_PRIVATE)
+        val namaPemesan =
+            pref.getString("NAMA_PEMESAN", "Traveler") ?: "Traveler"
 
-        kodeBooking = intent.getStringExtra("KODE_BOOKING") ?: buatKodeBooking()
-        tokenTiket = intent.getStringExtra("TOKEN_TIKET") ?: buatTokenTiket()
+        tvNamaPemesan.text = namaPemesan
 
+        val adaTiket =
+            pref.getBoolean("ADA_TIKET", false)
+
+        if (!adaTiket) {
+
+            layoutEmptyTicket.visibility = View.VISIBLE
+            cardTicket.visibility = View.GONE
+
+            return
+        }
+        layoutEmptyTicket.visibility = View.GONE
+        cardTicket.visibility = View.VISIBLE
+
+
+        val nama =
+            pref.getString("NAMA_DESTINASI", "-") ?: "-"
+
+        val lokasi =
+            pref.getString("LOKASI_DESTINASI", "-") ?: "-"
+
+        val gambar =
+            pref.getInt(
+                "GAMBAR_DESTINASI",
+                R.drawable.img_onboarding1
+            )
+
+        val tanggalBerangkat =
+            pref.getString("TANGGAL_BERANGKAT", "-") ?: "-"
+
+        val tanggalKembali =
+            pref.getString("TANGGAL_KEMBALI", "-") ?: "-"
+
+        val jumlahOrang =
+            pref.getInt("JUMLAH_ORANG", 1)
+
+        val totalHarga =
+            pref.getInt("TOTAL_HARGA", 0)
+
+        val status =
+            pref.getString("PAYMENT_STATUS", "-") ?: "-"
+
+        kodeBooking =
+            pref.getString("KODE_BOOKING", "-") ?: "-"
+
+        tokenTiket =
+            pref.getString("TOKEN_TIKET", "-") ?: "-"
         tvNamaDestinasi.text = nama
         tvLokasi.text = lokasi
         imgDestinasi.setImageResource(gambar)
@@ -114,17 +181,7 @@ class MyTicketActivity : AppCompatActivity() {
         tvValue.text = value
     }
 
-    private fun buatKodeBooking(): String {
-        val random = (100000000..999999999).random()
-        return "TRV$random"
-    }
-
-    private fun buatTokenTiket(): String {
-        val random = (100000..999999).random()
-        return "TKT-$random"
-    }
-
-    private fun generateBarcodeText(kode: String): String {
+       private fun generateBarcodeText(kode: String): String {
         val builder = StringBuilder()
 
         kode.forEachIndexed { index, char ->

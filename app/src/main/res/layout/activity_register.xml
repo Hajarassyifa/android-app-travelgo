@@ -51,7 +51,9 @@
         app:boxCornerRadiusTopStart="12dp"
         app:startIconDrawable="@drawable/ic_user"
         app:layout_constraintTop_toBottomOf="@id/tvSub">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNama"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
@@ -70,7 +72,9 @@
         app:boxCornerRadiusTopStart="12dp"
         app:startIconDrawable="@drawable/ic_mail"
         app:layout_constraintTop_toBottomOf="@id/tilNama">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress" />
@@ -90,7 +94,31 @@
         app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/ic_lock"
         app:layout_constraintTop_toBottomOf="@id/tilEmail">
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilKonfirmasiPass"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Konfirmasi Password"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:passwordToggleEnabled="true"
+        app:startIconDrawable="@drawable/ic_lock"
+        app:layout_constraintTop_toBottomOf="@id/tilPass">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etKonfirmasiPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
@@ -100,13 +128,13 @@
         android:id="@+id/btnDaftar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/primary_blue"
         android:fontFamily="@font/poppins_bold"
         android:text="Daftar"
         android:textAllCaps="false"
         app:cornerRadius="12dp"
-        app:layout_constraintTop_toBottomOf="@id/tilPass" />
+        app:layout_constraintTop_toBottomOf="@id/tilKonfirmasiPass" />
 
     <TextView
         android:id="@+id/tvToLogin"

@@ -2,6 +2,9 @@ package com.example.travelgo
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -17,9 +20,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rvArtikel: RecyclerView
     private lateinit var bannerViewPager: ViewPager2
     private lateinit var bottomNav: BottomNavigationView
+    private lateinit var tvSapaan: TextView
 
+    private lateinit var etSearch: EditText
+    private lateinit var destinasiAdapter: DestinasiAdapter
     private var listWisata = ArrayList<Destinasi>()
     private var listArtikel = ArrayList<Artikel>()
+
+    private var filteredWisata = ArrayList<Destinasi>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +37,10 @@ class MainActivity : AppCompatActivity() {
         rvArtikel = findViewById(R.id.rvArtikel)
         bannerViewPager = findViewById(R.id.bannerViewPager)
         bottomNav = findViewById(R.id.bottomNavigation)
+        tvSapaan = findViewById(R.id.tvSapaan)
+        etSearch = findViewById(R.id.etSearch)
 
+        setupSapaanUser()
         setupBanner()
         prepareDataDestinasi()
         prepareDataArtikel()
@@ -39,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         setupCategoryButtons()
         setupBottomNavigation()
+        setupSearch()
     }
 
     private fun setupBanner() {
@@ -49,6 +61,18 @@ class MainActivity : AppCompatActivity() {
         )
         bannerViewPager.adapter = OnboardingAdapter(images)
     }
+    private fun setupSapaanUser() {
+
+        val sharedPref =
+            getSharedPreferences("USER_DATA", MODE_PRIVATE)
+
+        val namaUser =
+            sharedPref.getString("NAMA", "Traveler")
+
+        tvSapaan.text =
+            "Halo, $namaUser 👋"
+    }
+
 
     private fun prepareDataDestinasi() {
         listWisata.clear()
@@ -59,19 +83,106 @@ class MainActivity : AppCompatActivity() {
 
     private fun prepareDataArtikel() {
         listArtikel.clear()
-        listArtikel.add(Artikel(1, "5 Destinasi Pantai Terindah di Indonesia", "Pantai", "5 menit baca", R.drawable.img_onboarding1))
-        listArtikel.add(Artikel(2, "Tips Packing Hemat untuk Traveling", "Tips", "4 menit baca", R.drawable.img_onboarding2))
-        listArtikel.add(Artikel(3, "Mengunjungi Candi Borobudur", "Sejarah", "6 menit baca", R.drawable.img_onboarding3))
+
+        listArtikel.add(
+            Artikel(
+                1,
+                "Tips Traveling ke Bali",
+                "Tips",
+                "5 menit baca",
+                "19 Mei 2026",
+                R.drawable.img_onboarding1,
+                "Bali selalu menjadi destinasi favorit para traveler."
+            )
+        )
+
+        listArtikel.add(
+            Artikel(
+                2,
+                "5 Pantai Terbaik di Indonesia",
+                "Pantai",
+                "4 menit baca",
+                "18 Mei 2026",
+                R.drawable.img_onboarding2,
+                "Indonesia memiliki banyak pantai indah yang wajib dikunjungi."
+            )
+        )
+
+        listArtikel.add(
+            Artikel(
+                3,
+                "Packing Hemat untuk Traveler",
+                "Tips",
+                "3 menit baca",
+                "17 Mei 2026",
+                R.drawable.img_onboarding3,
+                "Packing hemat membuat perjalanan lebih nyaman dan praktis."
+            )
+        )
     }
 
     private fun showDestinasiHorizontal() {
-        rvDestinasi.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvDestinasi.adapter = DestinasiAdapter(listWisata)
+        filteredWisata.clear()
+        filteredWisata.addAll(listWisata)
+
+        rvDestinasi.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        destinasiAdapter = DestinasiAdapter(filteredWisata)
+        rvDestinasi.adapter = destinasiAdapter
+    }
+    private fun setupSearch() {
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterDestinasi(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    private fun filterDestinasi(keyword: String) {
+        filteredWisata.clear()
+
+        if (keyword.isEmpty()) {
+            filteredWisata.addAll(listWisata)
+        } else {
+            val query = keyword.lowercase()
+
+            filteredWisata.addAll(
+                listWisata.filter {
+                    it.nama.lowercase().contains(query) ||
+                            it.lokasi.lowercase().contains(query) ||
+                            it.kategori.lowercase().contains(query)
+                }
+            )
+        }
+
+        destinasiAdapter.notifyDataSetChanged()
     }
 
     private fun showArtikelVertical() {
-        rvArtikel.layoutManager = LinearLayoutManager(this)
-        rvArtikel.adapter = ArtikelAdapter(listArtikel)
+        rvArtikel.layoutManager =
+            LinearLayoutManager(this)
+
+        rvArtikel.adapter =
+            ArtikelAdapter(listArtikel) { artikel ->
+
+                val intent =
+                    Intent(this, DetailArtikelActivity::class.java)
+
+                intent.putExtra("JUDUL", artikel.judul)
+                intent.putExtra("KATEGORI", artikel.kategori)
+                intent.putExtra("WAKTU", artikel.waktuBaca)
+                intent.putExtra("TANGGAL", artikel.tanggal)
+                intent.putExtra("GAMBAR", artikel.gambar)
+                intent.putExtra("ISI", artikel.isi)
+
+                startActivity(intent)
+            }
+
         rvArtikel.isNestedScrollingEnabled = false
     }
 
@@ -97,6 +208,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.nav_artikel -> {
+                    startActivity(Intent(this, ArtikelActivity::class.java))
                     true
                 }
 
@@ -113,6 +225,7 @@ class MainActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.nav_beranda
     }
 
+
     private fun setupCategoryButtons() {
         fun initCategory(id: Int, name: String, iconRes: Int, categoryFilter: String) {
             val layout = findViewById<LinearLayout>(id)
@@ -126,6 +239,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
 
         initCategory(R.id.catAll, "Semua", R.drawable.ic_all, "Semua")
         initCategory(R.id.catBeach, "Pantai", R.drawable.ic_beach, "Pantai")

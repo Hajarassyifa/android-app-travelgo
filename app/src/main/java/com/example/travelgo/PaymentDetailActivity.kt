@@ -19,6 +19,10 @@ class PaymentDetailActivity : AppCompatActivity() {
     private lateinit var tvNamaBank: TextView
     private lateinit var tvNomorRekening: TextView
 
+    private lateinit var tvTotalPembayaran: TextView
+
+    private lateinit var tvCatatanBooking: TextView
+
     private var metodePembayaran = "BCA"
     private var totalHarga = 0
 
@@ -32,12 +36,22 @@ class PaymentDetailActivity : AppCompatActivity() {
         tvDeskripsiPembayaran = findViewById(R.id.tvDeskripsiPembayaran)
         tvNamaBank = findViewById(R.id.tvNamaBank)
         tvNomorRekening = findViewById(R.id.tvNomorRekening)
+        tvTotalPembayaran = findViewById(R.id.tvTotalPembayaran)
+        tvTotalPembayaran.text = formatRupiah(totalHarga)
+
+        tvCatatanBooking = findViewById(R.id.tvCatatanBooking)
+
 
         metodePembayaran =
             intent.getStringExtra("METODE_PEMBAYARAN") ?: "BCA"
 
         totalHarga =
             intent.getIntExtra("TOTAL_HARGA", 0)
+        val kodeBooking =
+            intent.getStringExtra("KODE_BOOKING")
+                ?: "-"
+        tvCatatanBooking.text =
+            "Gunakan kode booking $kodeBooking sebagai berita saat transfer."
 
         setupPaymentInfo()
 

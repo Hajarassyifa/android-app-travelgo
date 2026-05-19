@@ -30,8 +30,42 @@
                 android:textColor="@color/black"
                 android:textSize="24sp" />
         </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/layoutEmptyTicket"
+            android:layout_width="match_parent"
+            android:layout_height="520dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_booking"
+                app:tint="#9CA3AF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Belum Ada Tiket"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Tiket yang sudah kamu beli akan muncul di sini."
+                android:textColor="#6B7280"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardTicket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -104,6 +138,13 @@
                             android:text="Pantai"
                             android:textColor="#6B7280"
                             android:textSize="15sp" />
+                        <TextView
+                            android:id="@+id/tvNamaPemesan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Traveler"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"/>
                     </LinearLayout>
 
                     <LinearLayout
