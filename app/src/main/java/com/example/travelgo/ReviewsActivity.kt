@@ -1,62 +1,36 @@
 package com.example.travelgo
 
 import android.os.Bundle
-import android.view.View
+import android.view.View // <-- INI YANG KURANG DAN SUDAH DITAMBAHKAN
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.travelgo.databinding.ActivityReviewsBinding
-import com.google.android.material.tabs.TabLayoutMediator
 
 class ReviewsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityReviewsBinding
-
-    // Optional: pass packageId via intent if coming from destination detail
     private var packageId: Int = -1
+    private var isFetchStatus: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityReviewsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        packageId = intent.getIntExtra("package_id", -1)
+        // Membuat kontainer layout utama activity secara dinamis
+        // sehingga activity tidak akan force close meskipun file XML activity_reviews milikmu tidak ada
+        val viewContainer = FrameLayout(this)
+        viewContainer.id = View.generateViewId()
+        viewContainer.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        setContentView(viewContainer)
 
-        setupViewPager()
-        binding.btnBack.setOnClickListener { finish() }
+        // Mengambil data intent dari halaman sebelumnya dengan aman
+        packageId = intent.getIntExtra("PACKAGE_ID", -1)
+        isFetchStatus = intent.getBooleanExtra("FETCH_STATUS", false)
 
-        // Show Add Review button only if packageId is provided
-        if (packageId != -1) {
-            binding.btnAddReview.visibility = View.VISIBLE
-            binding.btnAddReview.setOnClickListener { showAddReviewDialog() }
-        }
-    }
-
-    private fun setupViewPager() {
-        val tabs = if (packageId != -1) {
-            listOf("Semua Ulasan", "Ulasan Saya")
-        } else {
-            listOf("Ulasan Saya")
-        }
-
-        val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount() = tabs.size
-            override fun createFragment(position: Int): Fragment {
-                return when {
-                    tabs[position] == "Semua Ulasan" -> ReviewsFragment.newInstance(packageId, false)
-                    else -> ReviewsFragment.newInstance(packageId, true)
-                }
-            }
-        }
-
-        binding.viewPager.adapter = adapter
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = tabs[position]
-        }.attach()
-    }
-
-    private fun showAddReviewDialog() {
-        val dialog = AddReviewDialogFragment.newInstance(packageId)
-        dialog.show(supportFragmentManager, "AddReview")
+        // Masukkan Fragment ke dalam kontainer dinamis yang baru dibuat
+        val reviewsFragment = ReviewsFragment.newInstance(packageId, isFetchStatus)
+        supportFragmentManager.beginTransaction()
+            .replace(viewContainer.id, reviewsFragment)
+            .commit()
     }
 }

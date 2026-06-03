@@ -11,14 +11,14 @@ data class LoginRequest(
 )
 
 data class RegisterRequest(
-    val nama: String,           // backend pakai "nama" bukan "name"
+    val nama: String,
     val email: String,
     val password: String,
     val password_confirmation: String
 )
 
 data class AuthResponse(
-    val status: Boolean,        // backend pakai "status" bukan "success"
+    val status: Boolean,
     val message: String,
     val token: String?,
     val data: UserData?
@@ -26,16 +26,16 @@ data class AuthResponse(
 
 data class UserData(
     val id: Int,
-    val nama: String,           // backend pakai "nama"
+    val nama: String,
     val email: String,
     val role: String?
 )
 
 // ======================
-// BASE
+// BASE / GENERAL RESPONSE
 // ======================
 data class BaseResponse(
-    val status: Boolean,        // backend pakai "status"
+    val status: Boolean,
     val message: String,
     val data: Any? = null
 )
@@ -139,11 +139,13 @@ data class TransaksiRequest(
 
 data class TransaksiListResponse(
     val status: Boolean,
+    val message: String = "",
     val data: List<Transaksi>
 )
 
 data class TransaksiDetailResponse(
     val status: Boolean,
+    val message: String = "",
     val data: Transaksi
 )
 
@@ -167,7 +169,7 @@ data class ProfileResponse(
 
 data class UserProfile(
     @SerializedName("id") val id: Int,
-    @SerializedName("nama") val name: String,   // backend pakai "nama"
+    @SerializedName("nama") val name: String,
     @SerializedName("email") val email: String,
     @SerializedName("phone") val phone: String?,
     @SerializedName("photo") val photo: String?,
@@ -175,7 +177,12 @@ data class UserProfile(
 )
 
 data class UpdateNameRequest(
-    val nama: String    // backend pakai "nama"
+    val nama: String
+)
+
+data class UpdateProfileRequest(
+    val nama: String,
+    val phone: String?
 )
 
 // ======================
@@ -227,11 +234,60 @@ data class Review(
 
 data class ReviewUser(
     @SerializedName("id") val id: Int,
-    @SerializedName("nama") val name: String,   // backend pakai "nama"
+    @SerializedName("nama") val name: String,
     @SerializedName("photo") val photo: String?
 )
 
 data class ReviewDestinasi(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String
+)
+
+// ==========================================
+// ARTIKEL MODEL & RESPONSES
+// ==========================================
+data class ArtikelResponse(
+    @SerializedName("status") val status: Boolean,
+    @SerializedName("message") val message: String = "",
+    @SerializedName("data") val data: List<Artikel>
+)
+
+data class ArtikelDetailResponse(
+    @SerializedName("status") val status: Boolean,
+    @SerializedName("message") val message: String = "",
+    @SerializedName("data") val data: Artikel
+)
+
+data class Artikel(
+    @SerializedName("id") val id: Int,
+    @SerializedName("judul") val title: String,
+    @SerializedName("kategori") val category: String,
+    @SerializedName("isi") val content: String,
+    @SerializedName("gambar") val image: String?,
+    @SerializedName("created_at") val date: String
+)
+
+// ==========================================
+// DESTINASI MODEL & RESPONSES
+// ==========================================
+data class DestinasiResponse(
+    @SerializedName("status") val status: Boolean,
+    @SerializedName("message") val message: String = "",
+    @SerializedName("data") val data: List<Destinasi>
+)
+
+data class DestinasiDetailResponse(
+    @SerializedName("status") val status: Boolean,
+    @SerializedName("message") val message: String = "",
+    @SerializedName("data") val data: Destinasi
+)
+
+data class Destinasi(
+    @SerializedName("id") val id: Int,
+    @SerializedName("nama_destinasi") val name: String,
+    @SerializedName("lokasi") val location: String,
+    @SerializedName("harga") val price: Double,
+    @SerializedName("gambar") val image: String?,
+    @SerializedName("deskripsi") val description: String? = null,
+    @SerializedName("rating") val rating: Double? = null
 )

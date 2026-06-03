@@ -1,5 +1,6 @@
 package com.example.travelgo
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,7 @@ class DestinasiAdapter(
 ) : RecyclerView.Adapter<DestinasiAdapter.DestinasiViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DestinasiViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_destinasi, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_destinasi, parent, false)
         return DestinasiViewHolder(view)
     }
 
@@ -35,11 +35,25 @@ class DestinasiAdapter(
             tvLocation.text = destinasi.location
             tvPrice.text = "Rp ${destinasi.price}"
 
+            var imageUrl = destinasi.image ?: ""
+            if (imageUrl.contains("localhost")) {
+                imageUrl = imageUrl.replace("localhost", "10.0.2.2")
+            } else if (imageUrl.contains("127.0.0.1")) {
+                imageUrl = imageUrl.replace("127.0.0.1", "10.0.2.2")
+            }
+
             Glide.with(itemView.context)
-                .load(destinasi.image)
+                .load(imageUrl)
                 .placeholder(android.R.color.darker_gray)
                 .error(android.R.color.holo_red_light)
                 .into(ivImage)
+
+            itemView.setOnClickListener {
+                val context = itemView.context
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("DESTINASI_ID", destinasi.id)
+                context.startActivity(intent)
+            }
         }
     }
 }
