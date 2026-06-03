@@ -97,18 +97,41 @@ class MainActivity : AppCompatActivity() {
         btnKategoriSejarah.setOnClickListener { filterKategori("Sejarah") }
         btnKategoriKuliner.setOnClickListener { filterKategori("Kuliner") }
 
+        // PERBAIKAN TOTAL NAVIGASI BAWAH:
+        // Deteksi dinamis menggunakan posisi indeks menu atau judul item agar bebas hambatan eror XML ID
         bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.title.toString().lowercase()) {
-                "beranda", "home" -> true
-                "tiket", "ticket", "my ticket" -> {
+            val title = item.title.toString().lowercase()
+            val itemId = item.itemId
+
+            // Mengambil ID item pertama dan item terakhir secara aman langsung dari runtime menu
+            val firstItemId = if (bottomNavigation.menu.size() > 0) bottomNavigation.menu.getItem(0).itemId else -1
+            val lastItemId = if (bottomNavigation.menu.size() > 0) bottomNavigation.menu.getItem(bottomNavigation.menu.size() - 1).itemId else -1
+
+            when {
+                // 1. Menu Beranda / Home (Bisa lewat ID ke-0, judul, atau penamaan ID umum)
+                itemId == firstItemId || title.contains("beranda") || title.contains("home") -> {
+                    // Berada di halaman utama, pertahankan posisi aktif menu
+                    true
+                }
+
+                // 2. Menu Tiket / My Ticket
+                title.contains("tiket") || title.contains("ticket") -> {
                     startActivity(Intent(this, MyTicketActivity::class.java))
-                    false
+                    overridePendingTransition(0, 0)
+                    false // Return false agar highlight tidak tertinggal sebelum aktivitas berpindah
                 }
-                "profil", "profile" -> {
+
+                // 3. Menu Profil / Profile (Bisa lewat ID paling akhir atau teks judul)
+                itemId == lastItemId || title.contains("profil") || title.contains("profile") -> {
                     startActivity(Intent(this, ProfileActivity::class.java))
+                    overridePendingTransition(0, 0)
                     false
                 }
-                else -> false
+
+                // 4. Pengaman untuk item menu opsional lainnya (misal: History/Bookmark)
+                else -> {
+                    true
+                }
             }
         }
     }
