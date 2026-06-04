@@ -1,13 +1,12 @@
 package com.example.travelgo
 
-import com.google.gson.annotations.SerializedName
-
+// REVISI: Langsung gunakan nama 'image' agar sinkron dengan kodingan Adapter
 data class Destinasi(
-    @SerializedName("id") val id: Int,
-    @SerializedName("nama_destinasi") val nama: String,
-    @SerializedName("lokasi") val lokasi: String,
-    @SerializedName("deskripsi") val deskripsi: String,
-    @SerializedName("harga_tiket") val harga: String,
-    val kategori: String = "",   // ← tambah ini
-    val image: Int = 0
+    val id: Int,
+    val nama: String,
+    val lokasi: String,
+    val deskripsi: String,
+    val harga: String,
+    val kategori: String,
+    val image: Int // Variabel ini yang akan menyimpan R.drawable.nama_gambar
 )
