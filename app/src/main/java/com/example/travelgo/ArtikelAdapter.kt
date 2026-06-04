@@ -25,23 +25,23 @@ class ArtikelAdapter(
     override fun getItemCount(): Int = artikelList.size
 
     class ArtikelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivImage: ImageView = itemView.findViewById(R.id.ivArtikelImage)
-        private val tvTitle: TextView = itemView.findViewById(R.id.tvArtikelTitle)
-        private val tvExcerpt: TextView = itemView.findViewById(R.id.tvArtikelExcerpt)
-        private val tvCategory: TextView = itemView.findViewById(R.id.tvArtikelCategory)
-        private val tvDate: TextView = itemView.findViewById(R.id.tvArtikelDate)
+        private val ivGambar: ImageView = itemView.findViewById(R.id.ivGambar)
+        private val tvJudul: TextView = itemView.findViewById(R.id.tvJudul)
+        private val tvRingkasan: TextView = itemView.findViewById(R.id.tvRingkasan)
+        private val tvKategori: TextView = itemView.findViewById(R.id.tvKategori)
+        private val tvTanggal: TextView = itemView.findViewById(R.id.tvTanggal)
 
         fun bind(artikel: Artikel) {
-            tvTitle.text = artikel.title
-            tvExcerpt.text = artikel.excerpt ?: ""
-            tvCategory.text = artikel.category
-            tvDate.text = artikel.published_at?.substring(0, 10) ?: ""
+            tvJudul.text = artikel.title
+            tvRingkasan.text = artikel.excerpt ?: ""
+            tvKategori.text = artikel.category
+            tvTanggal.text = artikel.published_at?.substring(0, 10) ?: ""
 
             Glide.with(itemView.context)
                 .load(artikel.image)
                 .placeholder(android.R.color.darker_gray)
                 .error(android.R.color.holo_red_light)
-                .into(ivImage)
+                .into(ivGambar)
         }
     }
 }

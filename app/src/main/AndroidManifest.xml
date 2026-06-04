@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +14,6 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.TravelGo">
 
-        <!-- LAUNCHER -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -26,43 +23,26 @@
             </intent-filter>
         </activity>
 
-        <!-- ONBOARDING & AUTH -->
         <activity android:name=".GetStartedActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false" />
         <activity android:name=".LoginActivity" android:exported="false" />
         <activity android:name=".RegisterActivity" android:exported="false" />
 
-        <!-- MAIN -->
-        <activity android:name=".MainActivity" android:exported="false" />
-
-        <!-- DESTINASI -->
         <activity android:name=".DetailActivity" android:exported="false" />
         <activity android:name=".SemuaDestinasi" android:exported="false" />
-
-        <!-- BOOKING -->
         <activity android:name=".BookingActivity" android:exported="false" />
         <activity android:name=".DetailBookingActivity" android:exported="false" />
 
-        <!-- PAYMENT -->
         <activity android:name=".PaymentMethodActivity" android:exported="false" />
         <activity android:name=".PaymentDetailActivity" android:exported="false" />
         <activity android:name=".PaymentConfirmationActivity" android:exported="false" />
         <activity android:name=".PaymentSuccessActivity" android:exported="false" />
 
-        <!-- TIKET -->
         <activity android:name=".MyTicketActivity" android:exported="false" />
-
-        <!-- ARTIKEL -->
-        <activity android:name=".ArtikelActivity" android:exported="false" />
-        <activity android:name=".DetailArtikelActivity" android:exported="false" />
-
-        <!-- PROFILE -->
         <activity android:name=".ProfileActivity" android:exported="false" />
 
-        <!-- NOTIFICATIONS (BARU) -->
-        <activity android:name=".NotificationsActivity" android:exported="false" />
-
-        <!-- REVIEWS (BARU) -->
-        <activity android:name=".ReviewsActivity" android:exported="false" />
+        <activity android:name=".ArtikelActivity" android:exported="false" />
+        <activity android:name=".DetailArtikelActivity" android:exported="false" />
 
     </application>
 

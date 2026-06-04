@@ -30,73 +30,91 @@ class BookingActivity : AppCompatActivity() {
         destinasiId = intent.getIntExtra("DESTINASI_ID", 0)
 
         etTanggalBerangkat = findViewById(R.id.etTanggalBerangkat)
-        etJumlahTiket      = findViewById(R.id.etJumlahTiket)
-        etNama             = findViewById(R.id.etNama)
-        etEmail            = findViewById(R.id.etEmail)
-        etNoHp             = findViewById(R.id.etNoHp)
-        etSpecialRequests  = findViewById(R.id.etSpecialRequests)
-        btnBooking         = findViewById(R.id.btnBooking)
+        etJumlahTiket = findViewById(R.id.etJumlahTiket)
+        etNama = findViewById(R.id.etNama)
+        etEmail = findViewById(R.id.etEmail)
+        etNoHp = findViewById(R.id.etNoHp)
+        etSpecialRequests = findViewById(R.id.etSpecialRequests)
+        btnBooking = findViewById(R.id.btnBooking)
 
-        etTanggalBerangkat.setOnClickListener { showDatePicker() }
-        btnBooking.setOnClickListener { createBooking() }
+        etTanggalBerangkat.setOnClickListener {
+            showDatePicker()
+        }
+
+        btnBooking.setOnClickListener {
+            createBooking()
+        }
     }
 
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
-        DatePickerDialog(
+        val datePicker = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                val tanggal = "$year-${String.format("%02d", month + 1)}-${String.format("%02d", dayOfMonth)}"
+                val tanggal = "$year-${month + 1}-$dayOfMonth"
                 etTanggalBerangkat.setText(tanggal)
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        )
+        datePicker.show()
     }
 
     private fun createBooking() {
         val tanggalBerangkat = etTanggalBerangkat.text.toString()
-        val jumlahTiket      = etJumlahTiket.text.toString().toIntOrNull() ?: 0
-        val nama             = etNama.text.toString()
-        val email            = etEmail.text.toString()
-        val noHp             = etNoHp.text.toString()
-        val specialRequests  = etSpecialRequests.text.toString()
+        val jumlahTiket = etJumlahTiket.text.toString().toIntOrNull() ?: 0
+        val nama = etNama.text.toString()
+        val email = etEmail.text.toString()
+        val noHp = etNoHp.text.toString()
+        val specialRequests = etSpecialRequests.text.toString()
 
-        if (tanggalBerangkat.isEmpty()) { Toast.makeText(this, "Pilih tanggal berangkat", Toast.LENGTH_SHORT).show(); return }
-        if (jumlahTiket <= 0)          { Toast.makeText(this, "Jumlah tiket minimal 1",  Toast.LENGTH_SHORT).show(); return }
-        if (nama.isEmpty())            { Toast.makeText(this, "Masukkan nama",            Toast.LENGTH_SHORT).show(); return }
-        if (email.isEmpty())           { Toast.makeText(this, "Masukkan email",           Toast.LENGTH_SHORT).show(); return }
-        if (noHp.isEmpty())            { Toast.makeText(this, "Masukkan nomor HP",        Toast.LENGTH_SHORT).show(); return }
-
-        val token = SessionManager.getToken(this)
-        if (token == null) {
-            Toast.makeText(this, "Silakan login terlebih dahulu", Toast.LENGTH_SHORT).show()
+        if (tanggalBerangkat.isEmpty()) {
+            Toast.makeText(this, "Pilih tanggal berangkat", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (jumlahTiket <= 0) {
+            Toast.makeText(this, "Jumlah tiket minimal 1", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (nama.isEmpty()) {
+            Toast.makeText(this, "Masukkan nama", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Masukkan email", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (noHp.isEmpty()) {
+            Toast.makeText(this, "Masukkan nomor HP", Toast.LENGTH_SHORT).show()
             return
         }
 
         val request = BookingRequest(
-            destinasi_id      = destinasiId,
+            destinasi_id = destinasiId,
             tanggal_berangkat = tanggalBerangkat,
-            jumlah_tiket      = jumlahTiket,
-            customer_name     = nama,
-            customer_email    = email,
-            customer_phone    = noHp,
-            special_requests  = specialRequests.ifEmpty { null }
+            jumlah_tiket = jumlahTiket,
+            customer_name = nama,
+            customer_email = email,
+            customer_phone = noHp,
+            special_requests = specialRequests.ifEmpty { null }
         )
 
         btnBooking.isEnabled = false
         btnBooking.text = "Memproses..."
 
-        ApiClient.apiService.createBooking("Bearer $token", request)
+        RetrofitClient.instance.createBooking(request)
             .enqueue(object : Callback<BookingCreateResponse> {
-                override fun onResponse(call: Call<BookingCreateResponse>, response: Response<BookingCreateResponse>) {
+                override fun onResponse(
+                    call: Call<BookingCreateResponse>,
+                    response: Response<BookingCreateResponse>
+                ) {
                     btnBooking.isEnabled = true
                     btnBooking.text = "Booking"
 
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body?.status == true) {
+                        if (body?.success == true) {
                             Toast.makeText(
                                 this@BookingActivity,
                                 "Booking berhasil!\nKode: ${body.data.booking_code}\nTotal: Rp ${body.data.total_harga}",

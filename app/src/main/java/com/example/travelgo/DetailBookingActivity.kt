@@ -19,8 +19,10 @@ class DetailBookingActivity : AppCompatActivity() {
 
     private lateinit var btnBack: ImageView
     private lateinit var btnBayarSekarang: Button
+
     private lateinit var imgDestinasi: ImageView
     private lateinit var imgStatusIcon: ImageView
+
     private lateinit var tvStatusBooking: TextView
     private lateinit var tvNamaDestinasi: TextView
     private lateinit var tvTanggalBerangkat: TextView
@@ -38,33 +40,36 @@ class DetailBookingActivity : AppCompatActivity() {
     private var totalHarga: Double = 0.0
     private var paymentStatus: String = "unpaid"
     private var kodeBooking: String = ""
+    private var destinasiImage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_booking)
 
         initViews()
-        setupButton()
         getDataFromApi()
+        setupButton()
     }
 
     private fun initViews() {
-        btnBack            = findViewById(R.id.btnBack)
-        btnBayarSekarang   = findViewById(R.id.btnBayarSekarang)
-        imgDestinasi       = findViewById(R.id.imgDestinasi)
-        imgStatusIcon      = findViewById(R.id.imgStatusIcon)
-        tvStatusBooking    = findViewById(R.id.tvStatusBooking)
-        tvNamaDestinasi    = findViewById(R.id.tvNamaDestinasi)
+        btnBack = findViewById(R.id.btnBack)
+        btnBayarSekarang = findViewById(R.id.btnBayarSekarang)
+
+        imgDestinasi = findViewById(R.id.imgDestinasi)
+        imgStatusIcon = findViewById(R.id.imgStatusIcon)
+
+        tvStatusBooking = findViewById(R.id.tvStatusBooking)
+        tvNamaDestinasi = findViewById(R.id.tvNamaDestinasi)
         tvTanggalBerangkat = findViewById(R.id.tvTanggalBerangkat)
-        tvJumlahTiket      = findViewById(R.id.tvJumlahOrang)
-        tvHargaPerTiket    = findViewById(R.id.tvHargaPerOrang)
-        tvTotalHarga       = findViewById(R.id.tvTotalHarga)
+        tvJumlahTiket = findViewById(R.id.tvJumlahOrang)  // Reuse existing ID
+        tvHargaPerTiket = findViewById(R.id.tvHargaPerOrang)  // Reuse existing ID
+        tvTotalHarga = findViewById(R.id.tvTotalHarga)
         tvMetodePembayaran = findViewById(R.id.tvMetodePembayaran)
-        tvPaymentNote      = findViewById(R.id.tvPaymentNote)
-        tvKodeBooking      = findViewById(R.id.tvKodeBooking)
-        tvNamaPemesan      = findViewById(R.id.tvNamaPemesan)
-        tvEmailPemesan     = findViewById(R.id.tvEmailPemesan)
-        tvNoHpPemesan      = findViewById(R.id.tvNoHpPemesan)
+        tvPaymentNote = findViewById(R.id.tvPaymentNote)
+        tvKodeBooking = findViewById(R.id.tvKodeBooking)
+        tvNamaPemesan = findViewById(R.id.tvNamaPemesan)
+        tvEmailPemesan = findViewById(R.id.tvEmailPemesan)
+        tvNoHpPemesan = findViewById(R.id.tvNoHpPemesan)
     }
 
     private fun getDataFromApi() {
@@ -76,19 +81,15 @@ class DetailBookingActivity : AppCompatActivity() {
             return
         }
 
-        val token = SessionManager.getToken(this)
-        if (token == null) {
-            Toast.makeText(this, "Silakan login terlebih dahulu", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        ApiClient.apiService.getBookingDetail("Bearer $token", bookingId)
+        RetrofitClient.instance.getBookingDetail(bookingId)
             .enqueue(object : Callback<BookingDetailResponse> {
-                override fun onResponse(call: Call<BookingDetailResponse>, response: Response<BookingDetailResponse>) {
+                override fun onResponse(
+                    call: Call<BookingDetailResponse>,
+                    response: Response<BookingDetailResponse>
+                ) {
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body?.status == true) {
+                        if (body?.success == true) {
                             displayBookingData(body.data)
                         } else {
                             Toast.makeText(this@DetailBookingActivity, body?.message ?: "Gagal", Toast.LENGTH_SHORT).show()
@@ -108,26 +109,27 @@ class DetailBookingActivity : AppCompatActivity() {
     }
 
     private fun displayBookingData(booking: BookingDetail) {
-        totalHarga    = booking.total_harga
+        totalHarga = booking.total_harga
         paymentStatus = booking.payment_status
-        kodeBooking   = booking.booking_code
+        kodeBooking = booking.booking_code
+        destinasiImage = booking.destinasi?.image
 
-        tvNamaPemesan.text      = booking.customer_name
-        tvEmailPemesan.text     = booking.customer_email
-        tvNoHpPemesan.text      = booking.customer_phone
-        tvNamaDestinasi.text    = booking.destinasi?.name ?: "-"
+        tvNamaPemesan.text = booking.customer_name
+        tvEmailPemesan.text = booking.customer_email
+        tvNoHpPemesan.text = booking.customer_phone
+        tvNamaDestinasi.text = booking.destinasi?.name ?: "-"
         tvTanggalBerangkat.text = booking.tanggal_berangkat
-        tvJumlahTiket.text      = "${booking.jumlah_tiket} Tiket"
-        tvHargaPerTiket.text    = formatRupiah(booking.total_harga / booking.jumlah_tiket)
-        tvTotalHarga.text       = formatRupiah(booking.total_harga)
-        tvKodeBooking.text      = booking.booking_code
+        tvJumlahTiket.text = "${booking.jumlah_tiket} Tiket"
+        tvHargaPerTiket.text = formatRupiah(booking.total_harga / booking.jumlah_tiket)
+        tvTotalHarga.text = formatRupiah(booking.total_harga)
+        tvKodeBooking.text = booking.booking_code
 
-        if (!booking.destinasi?.image.isNullOrEmpty()) {
-            Glide.with(this)
-                .load(booking.destinasi?.image)
-                .placeholder(android.R.color.darker_gray)
-                .into(imgDestinasi)
-        }
+        // Load image with Glide
+        Glide.with(this)
+            .load(destinasiImage)
+            .placeholder(android.R.color.darker_gray)
+            .error(android.R.color.holo_red_light)
+            .into(imgDestinasi)
 
         updateStatusUI()
     }
@@ -165,21 +167,23 @@ class DetailBookingActivity : AppCompatActivity() {
     }
 
     private fun setupButton() {
-        btnBack.setOnClickListener { finish() }
+        btnBack.setOnClickListener {
+            finish()
+        }
 
         btnBayarSekarang.setOnClickListener {
             if (paymentStatus != "unpaid") return@setOnClickListener
-            val intent = Intent(this, PaymentMethodActivity::class.java).apply {
-                putExtra("BOOKING_ID",   bookingId)
-                putExtra("TOTAL_HARGA",  totalHarga)
-                putExtra("KODE_BOOKING", kodeBooking)
-            }
-            startActivity(intent)
+
+            val paymentIntent = Intent(this, PaymentMethodActivity::class.java)
+            paymentIntent.putExtra("BOOKING_ID", bookingId)
+            paymentIntent.putExtra("TOTAL_HARGA", totalHarga)
+            paymentIntent.putExtra("KODE_BOOKING", kodeBooking)
+            startActivity(paymentIntent)
         }
     }
 
     private fun formatRupiah(value: Double): String {
-        val format = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"))
-        return format.format(value).replace(",00", "")
+        val formatRupiah = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"))
+        return formatRupiah.format(value).replace(",00", "")
     }
 }
