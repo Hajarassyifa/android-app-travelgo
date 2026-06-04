@@ -1,132 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F5F7FA"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/ic_back" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#4CAF50"
+            android:title="Booking"
+            android:titleTextColor="#FFFFFF" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Form Booking"
-            android:textColor="#1F2937"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <View android:layout_width="28dp" android:layout_height="28dp" />
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/etTanggalBerangkat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginTop="16dp"
+            android:hint="Tanggal Berangkat"
+            android:inputType="date"
+            android:focusable="false" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Informasi Booking"
-                android:textColor="#1F2937"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <EditText
+            android:id="@+id/etJumlahTiket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Jumlah Tiket"
+            android:inputType="number" />
 
-            <EditText
-                android:id="@+id/etTanggalBerangkat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:hint="Tanggal Berangkat"
-                android:inputType="date"
-                android:padding="14dp" />
+        <EditText
+            android:id="@+id/etNama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Nama Lengkap" />
 
-            <EditText
-                android:id="@+id/etJumlahTiket"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:hint="Jumlah Tiket"
-                android:inputType="number"
-                android:padding="14dp" />
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Informasi Pemesan"
-                android:textColor="#1F2937"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+        <EditText
+            android:id="@+id/etNoHp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Nomor HP"
+            android:inputType="phone" />
 
-            <EditText
-                android:id="@+id/etNama"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:hint="Nama Lengkap"
-                android:padding="14dp" />
+        <EditText
+            android:id="@+id/etSpecialRequests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Permintaan Khusus (Opsional)"
+            android:inputType="textMultiLine" />
 
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:padding="14dp" />
+        <Button
+            android:id="@+id/btnBooking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="#4CAF50"
+            android:text="Booking Sekarang"
+            android:textColor="#FFFFFF" />
 
-            <EditText
-                android:id="@+id/etNoHp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:hint="Nomor HP"
-                android:inputType="phone"
-                android:padding="14dp" />
-
-            <EditText
-                android:id="@+id/etSpecialRequests"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="12dp"
-                android:background="@android:drawable/editbox_background"
-                android:gravity="top"
-                android:hint="Permintaan Khusus (Opsional)"
-                android:padding="14dp" />
-
-            <Button
-                android:id="@+id/btnBooking"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="24dp"
-                android:backgroundTint="#3B82F6"
-                android:text="Booking Sekarang"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

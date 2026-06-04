@@ -1,288 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4FF"
-    android:orientation="vertical">
+    android:background="@android:color/transparent">
 
-    <!-- NestedScrollView HARUS 0dp + weight=1 biar bottom nav tidak tertutup -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:overScrollMode="never">
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation"> <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <LinearLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_menu" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_notification" />
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_user"
+                    app:shapeAppearanceOverlay="@style/CircleImage" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvSapaan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Halo, Traveler! 👋"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Mau ke mana\njalananmu hari ini?"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_search"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="12dp"
+            android:hint="Cari destinasi..."
+            android:paddingStart="15dp"
+            android:textSize="14sp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="25dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="0dp">
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/bannerViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.cardview.widget.CardView>
+
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- HEADER -->
+            android:layout_marginTop="25dp"
+            android:scrollbars="none">
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#3B82F6"
-                android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingTop="24dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="32dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvSapaan"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Halo, Traveler 👋"
-                            android:textColor="#FFFFFF"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Mau ke mana hari ini?"
-                            android:textColor="#DBEAFE"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/btnNotification"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/circle_white_alpha"
-                        android:padding="8dp"
-                        android:src="@android:drawable/ic_dialog_info"
-                        android:clickable="true"
-                        android:focusable="true" />
-                </LinearLayout>
-
-                <!-- Search Bar -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/rounded_white"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_search"
-                        android:tint="#9CA3AF" />
-
-                    <EditText
-                        android:id="@+id/etSearch"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:hint="Cari destinasi impianmu..."
-                        android:paddingStart="10dp"
-                        android:textColor="#1F2937"
-                        android:textColorHint="#9CA3AF"
-                        android:textSize="14sp"
-                        android:inputType="text" />
-                </LinearLayout>
+                android:orientation="horizontal"
+                android:paddingEnd="20dp">
+                <include android:id="@+id/catAll" layout="@layout/item_category" />
+                <include android:id="@+id/catBeach" layout="@layout/item_category" />
+                <include android:id="@+id/catMountain" layout="@layout/item_category" />
+                <include android:id="@+id/catHistory" layout="@layout/item_category" />
+                <include android:id="@+id/catFood" layout="@layout/item_category" />
             </LinearLayout>
+        </HorizontalScrollView>
 
-            <!-- BANNER -->
-            <LinearLayout
-                android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp">
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#3B82F6"
-                android:orientation="vertical">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/bannerViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp" />
-
-                <LinearLayout
-                    android:id="@+id/dotsLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="12dp"
-                    android:orientation="horizontal" />
-            </LinearLayout>
-
-            <!-- CONTENT -->
-            <LinearLayout
-                android:layout_width="match_parent"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Rekomendasi Destinasi"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tvLihatSemua"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#F0F4FF"
-                android:orientation="vertical"
-                android:paddingTop="8dp">
+                android:layout_alignParentEnd="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Lihat Semua"
+                android:textColor="#808080" />
+        </RelativeLayout>
 
-                <!-- KATEGORI -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="#FFFFFF"
-                    android:elevation="4dp"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDestinasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:nestedScrollingEnabled="false" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="✈️  Kategori"
-                        android:textColor="#1F2937"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Artikel Terbaru"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Lihat Semua"
+                android:textColor="#4A69FF" />
+        </RelativeLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvArtikel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:nestedScrollingEnabled="false" />
 
-                        <LinearLayout android:id="@+id/catAll"
-                            android:layout_width="0dp" android:layout_height="72dp"
-                            android:layout_weight="1" android:background="#3B82F6"
-                            android:gravity="center" android:orientation="vertical" android:padding="6dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌍" android:textSize="22sp" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Semua" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/catBeach"
-                            android:layout_width="0dp" android:layout_height="72dp"
-                            android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏖️" android:textSize="22sp" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Pantai" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/catMountain"
-                            android:layout_width="0dp" android:layout_height="72dp"
-                            android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⛰️" android:textSize="22sp" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Gunung" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/catHistory"
-                            android:layout_width="0dp" android:layout_height="72dp"
-                            android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏛️" android:textSize="22sp" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Sejarah" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout android:id="@+id/catFood"
-                            android:layout_width="0dp" android:layout_height="72dp"
-                            android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🍜" android:textSize="22sp" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Kuliner" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- REKOMENDASI DESTINASI -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_weight="1" android:text="🗺️  Rekomendasi Destinasi"
-                        android:textColor="#1F2937" android:textSize="15sp" android:textStyle="bold" />
-                    <TextView android:id="@+id/tvLihatSemuaDestinasi"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Lihat Semua →" android:textColor="#3B82F6" android:textSize="13sp" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvDestinasi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp" />
-
-                <!-- PROMO BANNER -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="#1D4ED8"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
-                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎉 Promo Spesial!" android:textColor="#FCD34D" android:textSize="13sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Diskon 30% untuk booking pertama" android:textColor="#FFFFFF" android:textSize="12sp" />
-                    </LinearLayout>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:background="#FCD34D" android:paddingHorizontal="12dp" android:paddingVertical="6dp"
-                        android:text="Pakai" android:textColor="#1D4ED8" android:textSize="13sp" android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- ARTIKEL TERBARU -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_weight="1" android:text="📰  Artikel Terbaru"
-                        android:textColor="#1F2937" android:textSize="15sp" android:textStyle="bold" />
-                    <TextView android:id="@+id/tvLihatSemuaArtikel"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Lihat Semua →" android:textColor="#3B82F6" android:textSize="13sp" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvArtikel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp" />
-
-            </LinearLayout>
-        </LinearLayout>
+    </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- BOTTOM NAV — selalu di bawah karena NestedScrollView sudah pakai weight -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:elevation="12dp"
-        app:itemIconTint="@color/selector_bottom_nav"
-        app:itemTextColor="@color/selector_bottom_nav"
-        app:menu="@menu/bottom_nav_menu" />
+        android:layout_height="90dp"
 
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+
+        android:background="@android:color/white"
+        android:elevation="8dp"
+
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"
+
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/nav_selector"
+        app:itemTextColor="@color/nav_selector"
+        app:itemTextAppearanceActive="@style/BottomNavText"
+        app:itemTextAppearanceInactive="@style/BottomNavText"
+        app:menu="@menu/bottom_nav_menu" /> </RelativeLayout>
