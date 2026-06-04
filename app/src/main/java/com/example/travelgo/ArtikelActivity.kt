@@ -29,7 +29,7 @@ class ArtikelActivity : AppCompatActivity() {
     }
 
     private fun getArtikel() {
-        ApiClient.apiService.getArtikels(1, null, null)
+        RetrofitClient.instance.getArtikels(1, null, null)
             .enqueue(object : Callback<ArtikelResponse> {
                 override fun onResponse(
                     call: Call<ArtikelResponse>,
@@ -37,7 +37,7 @@ class ArtikelActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body?.status == true) { // Menggunakan validasi status backend
+                        if (body?.success == true) {
                             artikelList.clear()
                             artikelList.addAll(body.data)
                             artikelAdapter.notifyDataSetChanged()
