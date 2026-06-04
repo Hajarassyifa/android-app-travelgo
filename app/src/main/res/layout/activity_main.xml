@@ -6,8 +6,8 @@
     android:background="#F0F4FF"
     android:orientation="vertical">
 
+    <!-- NestedScrollView HARUS 0dp + weight=1 biar bottom nav tidak tertutup -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/mainNestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- HEADER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,6 +70,7 @@
                         android:focusable="true" />
                 </LinearLayout>
 
+                <!-- Search Bar -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -100,6 +102,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- BANNER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,6 +126,7 @@
                     android:orientation="horizontal" />
             </LinearLayout>
 
+            <!-- CONTENT -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,6 +134,7 @@
                 android:orientation="vertical"
                 android:paddingTop="8dp">
 
+                <!-- KATEGORI -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,8 +162,7 @@
                         <LinearLayout android:id="@+id/catAll"
                             android:layout_width="0dp" android:layout_height="72dp"
                             android:layout_weight="1" android:background="#3B82F6"
-                            android:gravity="center" android:orientation="vertical" android:padding="6dp"
-                            android:clickable="true" android:focusable="true">
+                            android:gravity="center" android:orientation="vertical" android:padding="6dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌍" android:textSize="22sp" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Semua" android:textColor="#FFFFFF" android:textSize="11sp" android:textStyle="bold" />
                         </LinearLayout>
@@ -166,8 +170,7 @@
                         <LinearLayout android:id="@+id/catBeach"
                             android:layout_width="0dp" android:layout_height="72dp"
                             android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp"
-                            android:clickable="true" android:focusable="true">
+                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏖️" android:textSize="22sp" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Pantai" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
                         </LinearLayout>
@@ -175,8 +178,7 @@
                         <LinearLayout android:id="@+id/catMountain"
                             android:layout_width="0dp" android:layout_height="72dp"
                             android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp"
-                            android:clickable="true" android:focusable="true">
+                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⛰️" android:textSize="22sp" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Gunung" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
                         </LinearLayout>
@@ -184,8 +186,7 @@
                         <LinearLayout android:id="@+id/catHistory"
                             android:layout_width="0dp" android:layout_height="72dp"
                             android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp"
-                            android:clickable="true" android:focusable="true">
+                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏛️" android:textSize="22sp" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Sejarah" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
                         </LinearLayout>
@@ -193,14 +194,14 @@
                         <LinearLayout android:id="@+id/catFood"
                             android:layout_width="0dp" android:layout_height="72dp"
                             android:layout_marginStart="6dp" android:layout_weight="1"
-                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp"
-                            android:clickable="true" android:focusable="true">
+                            android:background="#EFF6FF" android:gravity="center" android:orientation="vertical" android:padding="6dp">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🍜" android:textSize="22sp" />
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Kuliner" android:textColor="#3B82F6" android:textSize="11sp" android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
+                <!-- REKOMENDASI DESTINASI -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -212,8 +213,7 @@
                         android:textColor="#1F2937" android:textSize="15sp" android:textStyle="bold" />
                     <TextView android:id="@+id/tvLihatSemuaDestinasi"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Lihat Semua →" android:textColor="#3B82F6" android:textSize="13sp"
-                        android:clickable="true" android:focusable="true" />
+                        android:text="Lihat Semua →" android:textColor="#3B82F6" android:textSize="13sp" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -226,6 +226,7 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp" />
 
+                <!-- PROMO BANNER -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
@@ -244,6 +245,7 @@
                         android:text="Pakai" android:textColor="#1D4ED8" android:textSize="13sp" android:textStyle="bold" />
                 </LinearLayout>
 
+                <!-- ARTIKEL TERBARU -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -255,8 +257,7 @@
                         android:textColor="#1F2937" android:textSize="15sp" android:textStyle="bold" />
                     <TextView android:id="@+id/tvLihatSemuaArtikel"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Lihat Semua →" android:textColor="#3B82F6" android:textSize="13sp"
-                        android:clickable="true" android:focusable="true" />
+                        android:text="Lihat Semua →" android:textColor="#3B82F6" android:textSize="13sp" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -273,6 +274,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- BOTTOM NAV — selalu di bawah karena NestedScrollView sudah pakai weight -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

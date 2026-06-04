@@ -6,219 +6,164 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    // ======================
-    // AUTHENTICATION
-    // ======================
-    @POST("login")
-    fun login(@Body request: LoginRequest): Call<AuthResponse>
+    // ─── DESTINASI ────────────────────────────────────────────────
 
-    @POST("register")
-    fun register(@Body request: RegisterRequest): Call<AuthResponse>
+    @GET("api/destinasi")
+    fun getDestinasiList(): Call<DestinasiResponse>
 
-
-    // ======================
-    // DESTINASI
-    // ======================
-    @GET("destinasi")
-    fun getDestinasis(
-        @Query("page") page: Int,
-        @Query("kategori") kategori: String?,
-        @Query("search") search: String?
-    ): Call<DestinasiResponse>
-
-    @GET("destinasi/{id}")
+    @GET("api/destinasi/{id}")
     fun getDestinasiById(
         @Path("id") id: Int
     ): Call<DestinasiDetailResponse>
 
+    // ─── ARTIKEL ──────────────────────────────────────────────────
 
-    // ======================
-    // ARTIKEL
-    // ======================
-    @GET("artikel")
+    @GET("api/artikel")
     fun getArtikels(
         @Query("page") page: Int,
-        @Query("kategori") kategori: String?,
+        @Query("category") category: String?,
         @Query("search") search: String?
     ): Call<ArtikelResponse>
 
-    @GET("artikel/{id}")
+    @GET("api/artikel/{id}")
     fun getArtikelDetail(
         @Path("id") id: Int
     ): Call<ArtikelDetailResponse>
 
+    // ─── BOOKING ──────────────────────────────────────────────────
 
-    // ======================
-    // BOOKING
-    // ======================
-    @GET("booking")
+    @GET("api/booking")
     fun getBookings(
-        @Header("Authorization") token: String? = null
+        @Header("Authorization") token: String
     ): Call<BookingListResponse>
 
-    @GET("booking")
-    fun getBookingList(
-        @Header("Authorization") token: String? = null
-    ): Call<BookingListResponse>
-
-    @GET("booking/{id}")
+    @GET("api/booking/{id}")
     fun getBookingDetail(
+        @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Call<BookingDetailResponse>
 
-    @GET("booking/{id}")
-    fun getBookingDetail(
-        @Header("Authorization") token: String?,
+    @POST("api/booking")
+    fun createBooking(
+        @Header("Authorization") token: String,
+        @Body request: BookingRequest
+    ): Call<BookingCreateResponse>
+
+    @DELETE("api/booking/{id}")
+    fun cancelBooking(
+        @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): Call<BookingDetailResponse>
-
-    @POST("booking")
-    fun createBooking(
-        @Body request: BookingRequest
-    ): Call<BookingCreateResponse>
-
-    @POST("booking")
-    fun createBooking(
-        @Header("Authorization") token: String?,
-        @Body request: BookingRequest
-    ): Call<BookingCreateResponse>
-
-
-    // ======================
-    // TRANSAKSI
-    // ======================
-    @POST("transaksi")
-    fun createTransaksi(
-        @Body request: TransaksiRequest
     ): Call<BaseResponse>
 
-    @GET("transaksi")
-    fun getTransaksiList(): Call<TransaksiListResponse>
+    // ─── AUTH ─────────────────────────────────────────────────────
 
-    @GET("transaksi/{id}")
+    @POST("api/login")
+    fun login(
+        @Body request: LoginRequest
+    ): Call<AuthResponse>
+
+    @POST("api/register")
+    fun register(
+        @Body request: RegisterRequest
+    ): Call<AuthResponse>
+
+    @POST("api/logout")
+    fun logout(
+        @Header("Authorization") token: String
+    ): Call<BaseResponse>
+
+    // ─── PROFILE ──────────────────────────────────────────────────
+
+    @GET("api/profile")
+    fun getProfile(
+        @Header("Authorization") token: String
+    ): Call<ProfileResponse>
+
+    @PUT("api/profile")
+    fun updateProfile(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): Call<ProfileResponse>
+
+    @Multipart
+    @POST("api/profile/photo")
+    fun updatePhoto(
+        @Header("Authorization") token: String,
+        @Part photo: MultipartBody.Part
+    ): Call<ProfileResponse>
+
+    @PUT("api/change-password")
+    fun changePassword(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): Call<BaseResponse>
+
+    // ─── TRANSAKSI ────────────────────────────────────────────────
+
+    @GET("api/transaksi")
+    fun getTransaksiList(
+        @Header("Authorization") token: String
+    ): Call<TransaksiListResponse>
+
+    @GET("api/transaksi/{id}")
     fun getTransaksiDetail(
+        @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Call<TransaksiDetailResponse>
 
-
-    // ======================
-    // REVIEWS
-    // ======================
-    @GET("review")
-    fun getReviews(
-        @Header("Authorization") token: String? = null
-    ): Call<ReviewListResponse>
-
-    @GET("my-review")
-    fun getMyReviews(
-        @Header("Authorization") token: String? = null
-    ): Call<ReviewListResponse>
-
-    @GET("review")
-    fun getReviewList(): Call<ReviewListResponse>
-
-    @POST("review")
-    fun createReview(
+    @POST("api/transaksi")
+    fun createTransaksi(
         @Header("Authorization") token: String,
-        @Query("package_id") packageId: Int,
-        @Body body: Map<String, String>
-    ): Call<ReviewResponse>
-
-    @POST("review")
-    fun postReview(
-        @Body request: ReviewRequest
-    ): Call<ReviewResponse>
-
-    @PUT("review/{id}")
-    fun updateReview(
-        @Path("id") id: Int,
-        @Body body: Map<String, String>
-    ): Call<ReviewResponse>
-
-    @PUT("review/{id}")
-    fun updateReview(
-        @Header("Authorization") token: String?,
-        @Path("id") id: Int,
-        @Body body: Map<String, String>
-    ): Call<ReviewResponse>
-
-    @DELETE("review/{id}")
-    fun deleteReview(
-        @Path("id") id: Int
+        @Body request: TransaksiRequest
     ): Call<BaseResponse>
 
-    @DELETE("review/{id}")
-    fun deleteReview(
-        @Header("Authorization") token: String?,
-        @Path("id") id: Int
-    ): Call<BaseResponse>
+    // ─── NOTIFICATIONS ────────────────────────────────────────────
 
-
-    // ======================
-    // PROFILE
-    // ======================
-    @GET("profile")
-    fun getProfile(): Call<ProfileResponse>
-
-    @GET("profile")
-    fun getProfile(
-        @Header("Authorization") token: String?
-    ): Call<ProfileResponse>
-
-    @POST("profile/update-name")
-    fun updateName(
-        @Body request: UpdateNameRequest
-    ): Call<BaseResponse>
-
-    @PUT("profile")
-    fun updateProfile(
-        @Body request: UpdateProfileRequest
-    ): Call<ProfileResponse>
-
-    @PUT("profile")
-    fun updateProfile(
-        @Header("Authorization") token: String?,
-        @Body request: UpdateProfileRequest
-    ): Call<ProfileResponse>
-
-    @Multipart
-    @POST("profile/photo")
-    fun updatePhoto(
-        @Part photo: MultipartBody.Part
-    ): Call<ProfileResponse>
-
-    @Multipart
-    @POST("profile/photo")
-    fun updatePhoto(
-        @Header("Authorization") token: String?,
-        @Part photo: MultipartBody.Part
-    ): Call<ProfileResponse>
-
-
-    // ======================
-    // NOTIFICATIONS
-    // ======================
-    @GET("notifications")
+    @GET("api/notifications")
     fun getNotifications(
-        @Header("Authorization") token: String? = null
+        @Header("Authorization") token: String
     ): Call<NotificationListResponse>
 
-    @POST("notifications/{id}/read")
-    fun markNotificationRead(
-        @Path("id") id: Int
-    ): Call<BaseResponse>
-
-    @POST("notifications/{id}/read")
-    fun markNotificationRead(
-        @Header("Authorization") token: String?,
-        @Path("id") id: Int
-    ): Call<BaseResponse>
-
-    @POST("notifications/read-all")
-    fun markAllNotificationsRead(): Call<BaseResponse>
-
-    @POST("notifications/read-all")
+    @PUT("api/notifications/read-all")
     fun markAllNotificationsRead(
-        @Header("Authorization") token: String?
+        @Header("Authorization") token: String
     ): Call<BaseResponse>
+
+    @PUT("api/notifications/{id}/read")
+    fun markNotificationRead(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Call<BaseResponse>
+
+    // ─── REVIEWS ──────────────────────────────────────────────────
+
+    @GET("api/packages/{packageId}/reviews")
+    fun getReviews(
+        @Path("packageId") packageId: Int
+    ): Call<ReviewListResponse>
+
+    @POST("api/packages/{packageId}/reviews")
+    fun createReview(
+        @Header("Authorization") token: String,
+        @Path("packageId") packageId: Int,
+        @Body body: Map<String, String>
+    ): Call<ReviewResponse>
+
+    @PUT("api/reviews/{id}")
+    fun updateReview(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body body: Map<String, String>
+    ): Call<ReviewResponse>
+
+    @DELETE("api/reviews/{id}")
+    fun deleteReview(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Call<BaseResponse>
+
+    @GET("api/reviews/my")
+    fun getMyReviews(
+        @Header("Authorization") token: String
+    ): Call<ReviewListResponse>
 }
