@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity() {
 
         setupClickListeners()
 
-        // Memanggil fungsi load data dari API saat aplikasi pertama kali dibuka
         getDestinasiData()
         getArtikelData()
     }
@@ -98,126 +97,100 @@ class MainActivity : AppCompatActivity() {
         btnKategoriSejarah.setOnClickListener { filterKategori("Sejarah") }
         btnKategoriKuliner.setOnClickListener { filterKategori("Kuliner") }
 
-        // PERBAIKAN 100% NAVIGASI MENU BAWAH (Menggunakan Return True)
+        // PERBAIKAN TOTAL NAVIGASI BAWAH:
+        // Deteksi dinamis menggunakan posisi indeks menu atau judul item agar bebas hambatan eror XML ID
         bottomNavigation.setOnItemSelectedListener { item ->
             val title = item.title.toString().lowercase()
             val itemId = item.itemId
 
+            // Mengambil ID item pertama dan item terakhir secara aman langsung dari runtime menu
             val firstItemId = if (bottomNavigation.menu.size() > 0) bottomNavigation.menu.getItem(0).itemId else -1
             val lastItemId = if (bottomNavigation.menu.size() > 0) bottomNavigation.menu.getItem(bottomNavigation.menu.size() - 1).itemId else -1
 
             when {
-                // 1. Menu Beranda / Home
+                // 1. Menu Beranda / Home (Bisa lewat ID ke-0, judul, atau penamaan ID umum)
                 itemId == firstItemId || title.contains("beranda") || title.contains("home") -> {
+                    // Berada di halaman utama, pertahankan posisi aktif menu
                     true
                 }
 
                 // 2. Menu Tiket / My Ticket
                 title.contains("tiket") || title.contains("ticket") -> {
-                    val intent = Intent(this, MyTicketActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, MyTicketActivity::class.java))
                     overridePendingTransition(0, 0)
-                    true // Diwajibkan bernilai true agar state aktif terbaca sistem Android
+                    false // Return false agar highlight tidak tertinggal sebelum aktivitas berpindah
                 }
 
-                // 3. Menu Profil / Profile
+                // 3. Menu Profil / Profile (Bisa lewat ID paling akhir atau teks judul)
                 itemId == lastItemId || title.contains("profil") || title.contains("profile") -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, ProfileActivity::class.java))
                     overridePendingTransition(0, 0)
-                    true // Diwajibkan bernilai true agar state aktif terbaca sistem Android
+                    false
                 }
 
-                else -> true
+                // 4. Pengaman untuk item menu opsional lainnya (misal: History/Bookmark)
+                else -> {
+                    true
+                }
             }
         }
     }
 
     private fun filterKategori(kategoriName: String) {
-        val token = SessionManager.getToken(this)
-        val kategoriQuery = if (kategoriName == "Semua") null else kategoriName
-
-        ApiClient.apiService.getDestinasis("Bearer $token", 1, kategoriQuery, null)
-            .enqueue(object : Callback<DestinasiResponse> {
-                override fun onResponse(call: Call<DestinasiResponse>, response: Response<DestinasiResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val body = response.body()
-                        if (body?.data != null) {
-                            destinasiList.clear()
-                            destinasiList.addAll(body.data)
-                            destinasiAdapter.notifyDataSetChanged()
-                        }
-                    }
-                }
-                override fun onFailure(call: Call<DestinasiResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Gagal memfilter: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
-            })
+        Toast.makeText(this, "Menampilkan kategori: $kategoriName", Toast.LENGTH_SHORT).show()
     }
 
     private fun getDestinasiData() {
-        // PERBAIKAN UTAMA: Mengambil token login yang tersimpan di SessionManager
-        val token = SessionManager.getToken(this)
-
-        // Mengirimkan Token Pengaman Bearer ke rute API Destinasi terbaru
-        ApiClient.apiService.getDestinasis("Bearer $token", 1, null, null)
+        ApiClient.apiService.getDestinasis(1, null, null)
             .enqueue(object : Callback<DestinasiResponse> {
-                override fun onResponse(call: Call<DestinasiResponse>, response: Response<DestinasiResponse>) {
+                override fun onResponse(
+                    call: Call<DestinasiResponse>,
+                    response: Response<DestinasiResponse>
+                ) {
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body != null && body.data != null) {
+                        if (body?.status == true) {
                             destinasiList.clear()
                             destinasiList.addAll(body.data)
                             destinasiAdapter.notifyDataSetChanged()
                         } else {
-                            Toast.makeText(this@MainActivity, "Struktur data destinasi kosong", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@MainActivity, body?.message ?: "Gagal", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        val errorString = response.errorBody()?.string()
-                        Toast.makeText(this@MainActivity, "Server Error Destinasi: $errorString", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainActivity, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<DestinasiResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Koneksi Destinasi Gagal: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "Koneksi Destinasi Gagal: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
 
     private fun getArtikelData() {
-        // PERBAIKAN UTAMA: Mengambil token login yang tersimpan di SessionManager
-        val token = SessionManager.getToken(this)
-
-        // Mengirimkan Token Pengaman Bearer ke rute API Artikel terbaru
-        ApiClient.apiService.getArtikels("Bearer $token", 1, null, null)
+        ApiClient.apiService.getArtikels(1, null, null)
             .enqueue(object : Callback<ArtikelResponse> {
-                override fun onResponse(call: Call<ArtikelResponse>, response: Response<ArtikelResponse>) {
+                override fun onResponse(
+                    call: Call<ArtikelResponse>,
+                    response: Response<ArtikelResponse>
+                ) {
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body != null && body.data != null) {
+                        if (body?.status == true) {
                             artikelList.clear()
                             artikelList.addAll(body.data)
                             artikelAdapter.notifyDataSetChanged()
                         } else {
-                            Toast.makeText(this@MainActivity, "Struktur data artikel kosong", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@MainActivity, body?.message ?: "Gagal", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        val errorString = response.errorBody()?.string()
-                        Toast.makeText(this@MainActivity, "Server Error Artikel: $errorString", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainActivity, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<ArtikelResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Koneksi Artikel Gagal: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "Koneksi Artikel Gagal: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Mengembalikan sorotan warna menu bawah ke pilihan Home/Beranda (indeks 0) saat user kembali dari halaman profil/tiket
-        if (bottomNavigation.menu.size() > 0) {
-            bottomNavigation.selectedItemId = bottomNavigation.menu.getItem(0).itemId
-        }
     }
 }

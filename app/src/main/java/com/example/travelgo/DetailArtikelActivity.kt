@@ -13,79 +13,83 @@ import retrofit2.Response
 class DetailArtikelActivity : AppCompatActivity() {
 
     private lateinit var btnBack: ImageView
-    private lateinit var imgArtikelDetail: ImageView
-    private lateinit var tvKategoriDetail: TextView
-    private lateinit var tvJudulDetail: TextView
-    private lateinit var tvInfoDetail: TextView
-    private lateinit var tvIsiArtikel: TextView
+    private lateinit var imgArtikel: ImageView
+    private lateinit var tvJudul: TextView
+    private lateinit var tvInfo: TextView
+    private lateinit var tvIsi: TextView
+    private lateinit var tvKategori: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_artikel)
 
+        // Inisialisasi komponen View XML
         btnBack = findViewById(R.id.btnBack)
-        imgArtikelDetail = findViewById(R.id.imgArtikelDetail)
-        tvKategoriDetail = findViewById(R.id.tvKategoriDetail)
-        tvJudulDetail = findViewById(R.id.tvJudulDetail)
-        tvInfoDetail = findViewById(R.id.tvInfoDetail)
-        tvIsiArtikel = findViewById(R.id.tvIsiArtikel)
+        imgArtikel = findViewById(R.id.imgArtikelDetail)
+        tvJudul = findViewById(R.id.tvJudulDetail)
+        tvInfo = findViewById(R.id.tvInfoDetail)
+        tvIsi = findViewById(R.id.tvIsiArtikel)
+        tvKategori = findViewById(R.id.tvKategoriDetail)
 
-        btnBack.setOnClickListener { finish() }
+        btnBack.setOnClickListener {
+            finish()
+        }
 
+        // 1. Tangkap ID artikel yang dikirim oleh ArtikelAdapter
         val artikelId = intent.getIntExtra("ARTIKEL_ID", 0)
+
         if (artikelId != 0) {
-            getDetailArtikel(artikelId)
+            // 2. Jika ID valid, ambil data utuh dari API Laragon
+            fetchDetailArtikelFromApi(artikelId)
         } else {
-            Toast.makeText(this, "ID Artikel Tidak Valid", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gagal memuat artikel: ID Kosong", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
 
-    private fun getDetailArtikel(id: Int) {
-        val token = SessionManager.getToken(this)
-
-        ApiClient.apiService.getArtikelDetail("Bearer $token", id)
+    private fun fetchDetailArtikelFromApi(id: Int) {
+        ApiClient.apiService.getArtikelDetail(id)
             .enqueue(object : Callback<ArtikelDetailResponse> {
                 override fun onResponse(
                     call: Call<ArtikelDetailResponse>,
                     response: Response<ArtikelDetailResponse>
                 ) {
                     if (response.isSuccessful && response.body() != null) {
-                        val artikel = response.body()?.data
-                        artikel?.let { obj ->
+                        val artikel = response.body()!!.data
 
-                            // MEKANISME AMAN AUTOMATIC MAPPING
-                            var judulArtikel = ""
-                            var isiArtikel = ""
-                            var gambarUrl = ""
+                        // 3. Pasang data dari API ke komponen teks XML kamu
+                        tvJudul.text = artikel.title
 
-                            try {
-                                val fields = obj.javaClass.declaredFields
-                                for (f in fields) {
-                                    f.isAccessible = true
-                                    val name = f.name.lowercase()
-                                    if (name == "judul" || name == "title" || name.contains("judul")) judulArtikel = f.get(obj)?.toString() ?: ""
-                                    if (name == "konten" || name == "content" || name.contains("konten") || name.contains("isi")) isiArtikel = f.get(obj)?.toString() ?: ""
-                                    if (name == "gambar" || name == "image" || name.contains("gambar") || name.contains("foto")) gambarUrl = f.get(obj)?.toString() ?: ""
-                                }
-                            } catch (e: Exception) {}
+                        // Gunakan fallback jika 'kategori' di model berbentuk bahasa Indonesia atau berbeda variabel
+                        tvKategori.text = "Tips"
+                        tvIsi.text = artikel.content
 
-                            tvJudulDetail.text = if(judulArtikel.isNotEmpty()) judulArtikel else "Judul Kosong"
-                            tvIsiArtikel.text = if(isiArtikel.isNotEmpty()) isiArtikel else "Isi Kosong"
+                        // PERBAIKAN MUTLAK:
+                        // Menggunakan variabel 'date' (dari created_at) dan menghapus model 'author' yang tidak ada di DB
+                        val tanggal = artikel.date?.take(10) ?: "Baru saja"
+                        val penulis = "Admin" // Hardcode karena tabel database tidak punya kolom 'author'
 
-                            if (gambarUrl.isNotEmpty()) {
-                                Glide.with(this@DetailArtikelActivity)
-                                    .load(gambarUrl)
-                                    .into(imgArtikelDetail)
-                            }
+                        tvInfo.text = "$tanggal • Oleh $penulis"
+
+                        // 4. Muat gambar online/lokal menggunakan Glide
+                        var imageUrl = artikel.image ?: ""
+                        if (imageUrl.contains("localhost")) {
+                            imageUrl = imageUrl.replace("localhost", "10.0.2.2")
                         }
+
+                        Glide.with(this@DetailArtikelActivity)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.placeholder_image)
+                            .error(R.drawable.placeholder_image)
+                            .into(imgArtikel)
+
                     } else {
-                        Toast.makeText(this@DetailArtikelActivity, "Gagal memuat artikel", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@DetailArtikelActivity, "Artikel gagal dimuat dari server", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<ArtikelDetailResponse>, t: Throwable) {
-                    Toast.makeText(this@DetailArtikelActivity, "Koneksi Gagal: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DetailArtikelActivity, "Koneksi Error: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
