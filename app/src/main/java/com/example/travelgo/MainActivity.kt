@@ -61,44 +61,84 @@ class MainActivity : AppCompatActivity() {
         )
         bannerViewPager.adapter = OnboardingAdapter(images)
     }
-
     private fun setupSapaanUser() {
-        val sharedPref = getSharedPreferences("USER_DATA", MODE_PRIVATE)
-        val namaUser = sharedPref.getString("NAMA", "Traveler")
-        tvSapaan.text = "Halo, $namaUser 👋"
+
+        val sharedPref =
+            getSharedPreferences("USER_DATA", MODE_PRIVATE)
+
+        val namaUser =
+            sharedPref.getString("NAMA", "Traveler")
+
+        tvSapaan.text =
+            "Halo, $namaUser 👋"
     }
+
 
     private fun prepareDataDestinasi() {
         listWisata.clear()
-        // PAKAI FIELD YANG SESUAI DENGAN DESTINASIResponse.kt
-        listWisata.add(Destinasi(1, "Pantai Kuta", "Bali", 1250000.0, "img_onboarding1", "Pantai indah di Bali", 4.5))
-        listWisata.add(Destinasi(2, "Raja Ampat", "Papua Barat", 3250000.0, "img_onboarding2", "Surga bawah laut", 4.8))
-        listWisata.add(Destinasi(3, "Labuan Bajo", "NTT", 2150000.0, "img_onboarding3", "Pulau Komodo", 4.7))
+        listWisata.add(Destinasi(1, "Bali", "Bali", "Sunrise terbaik.", "Rp 1.250.000", "Pantai", R.drawable.img_onboarding1))
+        listWisata.add(Destinasi(2, "Raja Ampat", "Papua Barat", "Surga dunia.", "Rp 3.250.000", "Pantai", R.drawable.img_onboarding2))
+        listWisata.add(Destinasi(3, "Labuan Bajo", "NTT", "Komodo island.", "Rp 2.150.000", "Pantai", R.drawable.img_onboarding3))
     }
 
     private fun prepareDataArtikel() {
         listArtikel.clear()
-        // PAKAI FIELD YANG SESUAI DENGAN ARTIKELResponse.kt
-        listArtikel.add(Artikel(1, "Tips Traveling ke Bali", "tips-traveling", "Bali selalu menjadi destinasi favorit", "img_onboarding1", "Tips", "Admin", 100, "2024-05-19"))
-        listArtikel.add(Artikel(2, "5 Pantai Terbaik di Indonesia", "pantai-terbaik", "Indonesia memiliki banyak pantai indah", "img_onboarding2", "Pantai", "Admin", 85, "2024-05-18"))
-        listArtikel.add(Artikel(3, "Packing Hemat untuk Traveler", "packing-hemat", "Packing hemat membuat perjalanan nyaman", "img_onboarding3", "Tips", "Admin", 70, "2024-05-17"))
+
+        listArtikel.add(
+            Artikel(
+                1,
+                "Tips Traveling ke Bali",
+                "Tips",
+                "5 menit baca",
+                "19 Mei 2026",
+                R.drawable.img_onboarding1,
+                "Bali selalu menjadi destinasi favorit para traveler."
+            )
+        )
+
+        listArtikel.add(
+            Artikel(
+                2,
+                "5 Pantai Terbaik di Indonesia",
+                "Pantai",
+                "4 menit baca",
+                "18 Mei 2026",
+                R.drawable.img_onboarding2,
+                "Indonesia memiliki banyak pantai indah yang wajib dikunjungi."
+            )
+        )
+
+        listArtikel.add(
+            Artikel(
+                3,
+                "Packing Hemat untuk Traveler",
+                "Tips",
+                "3 menit baca",
+                "17 Mei 2026",
+                R.drawable.img_onboarding3,
+                "Packing hemat membuat perjalanan lebih nyaman dan praktis."
+            )
+        )
     }
 
     private fun showDestinasiHorizontal() {
         filteredWisata.clear()
         filteredWisata.addAll(listWisata)
 
-        rvDestinasi.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvDestinasi.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
         destinasiAdapter = DestinasiAdapter(filteredWisata)
         rvDestinasi.adapter = destinasiAdapter
     }
-
     private fun setupSearch() {
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 filterDestinasi(s.toString())
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -110,64 +150,97 @@ class MainActivity : AppCompatActivity() {
             filteredWisata.addAll(listWisata)
         } else {
             val query = keyword.lowercase()
+
             filteredWisata.addAll(
                 listWisata.filter {
-                    it.name.lowercase().contains(query) ||
-                            it.location.lowercase().contains(query) ||
-                            (it.description?.lowercase()?.contains(query) == true)
+                    it.nama.lowercase().contains(query) ||
+                            it.lokasi.lowercase().contains(query) ||
+                            it.kategori.lowercase().contains(query)
                 }
             )
         }
+
         destinasiAdapter.notifyDataSetChanged()
     }
 
     private fun showArtikelVertical() {
-        rvArtikel.layoutManager = LinearLayoutManager(this)
+        rvArtikel.layoutManager =
+            LinearLayoutManager(this)
 
-        // PAKAI ARTIKELAdapter TANPA ONCLICK (karena konstruktor hanya 1 parameter)
-        rvArtikel.adapter = ArtikelAdapter(listArtikel)
+        rvArtikel.adapter =
+            ArtikelAdapter(listArtikel) { artikel ->
+
+                val intent =
+                    Intent(this, DetailArtikelActivity::class.java)
+
+                intent.putExtra("JUDUL", artikel.judul)
+                intent.putExtra("KATEGORI", artikel.kategori)
+                intent.putExtra("WAKTU", artikel.waktuBaca)
+                intent.putExtra("TANGGAL", artikel.tanggal)
+                intent.putExtra("GAMBAR", artikel.gambar)
+                intent.putExtra("ISI", artikel.isi)
+
+                startActivity(intent)
+            }
+
         rvArtikel.isNestedScrollingEnabled = false
     }
 
     private fun setupBottomNavigation() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_beranda -> true
+
+                R.id.nav_beranda -> {
+                    true
+                }
+
                 R.id.nav_destinasi -> {
                     val intent = Intent(this, SemuaDestinasi::class.java)
                     intent.putExtra("kategori", "Semua")
                     startActivity(intent)
                     true
                 }
+
                 R.id.nav_booking -> {
-                    startActivity(Intent(this, MyTicketActivity::class.java))
+                    val intent = Intent(this, MyTicketActivity::class.java)
+                    startActivity(intent)
                     true
                 }
+
                 R.id.nav_artikel -> {
                     startActivity(Intent(this, ArtikelActivity::class.java))
                     true
                 }
+
                 R.id.nav_akun -> {
-                    startActivity(Intent(this, ProfileActivity::class.java))
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
                     true
                 }
+
                 else -> false
             }
         }
+
         bottomNav.selectedItemId = R.id.nav_beranda
     }
+
 
     private fun setupCategoryButtons() {
         fun initCategory(id: Int, name: String, iconRes: Int, categoryFilter: String) {
             val layout = findViewById<LinearLayout>(id)
+
             layout.findViewById<TextView>(R.id.tvCategoryName).text = name
             layout.findViewById<ImageView>(R.id.imgCategory).setImageResource(iconRes)
+
             layout.setOnClickListener {
                 val intent = Intent(this, SemuaDestinasi::class.java)
                 intent.putExtra("kategori", categoryFilter)
                 startActivity(intent)
             }
         }
+
+
         initCategory(R.id.catAll, "Semua", R.drawable.ic_all, "Semua")
         initCategory(R.id.catBeach, "Pantai", R.drawable.ic_beach, "Pantai")
         initCategory(R.id.catMountain, "Gunung", R.drawable.ic_mountain, "Gunung")

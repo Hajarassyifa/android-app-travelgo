@@ -6,12 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -26,28 +21,28 @@ class DetailBookingActivity : AppCompatActivity() {
     private lateinit var tvStatusBooking: TextView
     private lateinit var tvNamaDestinasi: TextView
     private lateinit var tvTanggalBerangkat: TextView
-    private lateinit var tvJumlahTiket: TextView
-    private lateinit var tvHargaPerTiket: TextView
+    private lateinit var tvTanggalKembali: TextView
+    private lateinit var tvJumlahOrang: TextView
+    private lateinit var tvHargaPerOrang: TextView
     private lateinit var tvTotalHarga: TextView
     private lateinit var tvMetodePembayaran: TextView
     private lateinit var tvPaymentNote: TextView
     private lateinit var tvKodeBooking: TextView
-    private lateinit var tvNamaPemesan: TextView
-    private lateinit var tvEmailPemesan: TextView
-    private lateinit var tvNoHpPemesan: TextView
 
-    private var bookingId: Int = 0
-    private var totalHarga: Double = 0.0
-    private var paymentStatus: String = "unpaid"
-    private var kodeBooking: String = ""
-    private var destinasiImage: String? = null
+    private lateinit var tvNamaPemesan: TextView
+
+    private var totalHarga = 0
+    private var paymentStatus = "Menunggu Pembayaran"
+    private var kodeBooking = ""
+    private var tokenTiket = ""
+    private var metodePembayaran = "Belum Dibayar"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_booking)
 
         initViews()
-        getDataFromApi()
+        ambilDataIntent()
         setupButton()
     }
 
@@ -61,108 +56,87 @@ class DetailBookingActivity : AppCompatActivity() {
         tvStatusBooking = findViewById(R.id.tvStatusBooking)
         tvNamaDestinasi = findViewById(R.id.tvNamaDestinasi)
         tvTanggalBerangkat = findViewById(R.id.tvTanggalBerangkat)
-        tvJumlahTiket = findViewById(R.id.tvJumlahOrang)  // Reuse existing ID
-        tvHargaPerTiket = findViewById(R.id.tvHargaPerOrang)  // Reuse existing ID
+        tvTanggalKembali = findViewById(R.id.tvTanggalKembali)
+        tvJumlahOrang = findViewById(R.id.tvJumlahOrang)
+        tvHargaPerOrang = findViewById(R.id.tvHargaPerOrang)
         tvTotalHarga = findViewById(R.id.tvTotalHarga)
         tvMetodePembayaran = findViewById(R.id.tvMetodePembayaran)
         tvPaymentNote = findViewById(R.id.tvPaymentNote)
         tvKodeBooking = findViewById(R.id.tvKodeBooking)
         tvNamaPemesan = findViewById(R.id.tvNamaPemesan)
-        tvEmailPemesan = findViewById(R.id.tvEmailPemesan)
-        tvNoHpPemesan = findViewById(R.id.tvNoHpPemesan)
     }
 
-    private fun getDataFromApi() {
-        bookingId = intent.getIntExtra("BOOKING_ID", 0)
+    private fun ambilDataIntent() {
+        val namaPemesan =
+            intent.getStringExtra("NAMA_PEMESAN") ?: "Traveler"
 
-        if (bookingId == 0) {
-            Toast.makeText(this, "Data booking tidak ditemukan", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+        tvNamaPemesan.text = namaPemesan
+        val namaDestinasi =
+            intent.getStringExtra("NAMA_DESTINASI") ?: "Destinasi"
 
-        RetrofitClient.instance.getBookingDetail(bookingId)
-            .enqueue(object : Callback<BookingDetailResponse> {
-                override fun onResponse(
-                    call: Call<BookingDetailResponse>,
-                    response: Response<BookingDetailResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        if (body?.success == true) {
-                            displayBookingData(body.data)
-                        } else {
-                            Toast.makeText(this@DetailBookingActivity, body?.message ?: "Gagal", Toast.LENGTH_SHORT).show()
-                            finish()
-                        }
-                    } else {
-                        Toast.makeText(this@DetailBookingActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                }
+        val gambarDestinasi =
+            intent.getIntExtra("GAMBAR_DESTINASI", R.drawable.img_onboarding1)
 
-                override fun onFailure(call: Call<BookingDetailResponse>, t: Throwable) {
-                    Toast.makeText(this@DetailBookingActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            })
-    }
+        val tanggalBerangkat =
+            intent.getStringExtra("TANGGAL_BERANGKAT") ?: "-"
 
-    private fun displayBookingData(booking: BookingDetail) {
-        totalHarga = booking.total_harga
-        paymentStatus = booking.payment_status
-        kodeBooking = booking.booking_code
-        destinasiImage = booking.destinasi?.image
+        val tanggalKembali =
+            intent.getStringExtra("TANGGAL_KEMBALI") ?: "-"
 
-        tvNamaPemesan.text = booking.customer_name
-        tvEmailPemesan.text = booking.customer_email
-        tvNoHpPemesan.text = booking.customer_phone
-        tvNamaDestinasi.text = booking.destinasi?.name ?: "-"
-        tvTanggalBerangkat.text = booking.tanggal_berangkat
-        tvJumlahTiket.text = "${booking.jumlah_tiket} Tiket"
-        tvHargaPerTiket.text = formatRupiah(booking.total_harga / booking.jumlah_tiket)
-        tvTotalHarga.text = formatRupiah(booking.total_harga)
-        tvKodeBooking.text = booking.booking_code
+        val jumlahOrang =
+            intent.getIntExtra("JUMLAH_ORANG", 1)
 
-        // Load image with Glide
-        Glide.with(this)
-            .load(destinasiImage)
-            .placeholder(android.R.color.darker_gray)
-            .error(android.R.color.holo_red_light)
-            .into(imgDestinasi)
+        val hargaPerOrang =
+            intent.getIntExtra("HARGA_PER_ORANG", 0)
+
+        totalHarga =
+            intent.getIntExtra("TOTAL_HARGA", 0)
+
+        paymentStatus =
+            intent.getStringExtra("PAYMENT_STATUS") ?: "Menunggu Pembayaran"
+
+        kodeBooking =
+            intent.getStringExtra("KODE_BOOKING") ?: "-"
+
+        tokenTiket =
+            intent.getStringExtra("TOKEN_TIKET") ?: "-"
+
+        metodePembayaran =
+            intent.getStringExtra("METODE_PEMBAYARAN") ?: "Belum Dibayar"
+
+        tvNamaDestinasi.text = namaDestinasi
+        imgDestinasi.setImageResource(gambarDestinasi)
+        tvTanggalBerangkat.text = tanggalBerangkat
+        tvTanggalKembali.text = tanggalKembali
+        tvJumlahOrang.text = "$jumlahOrang Orang"
+        tvHargaPerOrang.text = formatRupiah(hargaPerOrang)
+        tvTotalHarga.text = formatRupiah(totalHarga)
+        tvKodeBooking.text = kodeBooking
 
         updateStatusUI()
     }
 
     private fun updateStatusUI() {
-        when (paymentStatus) {
-            "paid" -> {
-                tvStatusBooking.text = "Sudah Dibayar"
-                tvStatusBooking.setTextColor(Color.parseColor("#10B981"))
-                imgStatusIcon.setColorFilter(Color.parseColor("#10B981"))
-                tvMetodePembayaran.text = "Transfer Bank / QRIS"
-                tvPaymentNote.text = "Pembayaran berhasil diverifikasi"
-                btnBayarSekarang.text = "Pembayaran Selesai"
-                btnBayarSekarang.isEnabled = false
-            }
-            "pending_verification" -> {
-                tvStatusBooking.text = "Verifikasi Pembayaran"
-                tvStatusBooking.setTextColor(Color.parseColor("#F59E0B"))
-                imgStatusIcon.setColorFilter(Color.parseColor("#F59E0B"))
-                tvMetodePembayaran.text = "Menunggu Verifikasi"
-                tvPaymentNote.text = "Bukti pembayaran sedang diverifikasi"
-                btnBayarSekarang.text = "Menunggu Verifikasi"
-                btnBayarSekarang.isEnabled = false
-            }
-            else -> {
-                tvStatusBooking.text = "Menunggu Pembayaran"
-                tvStatusBooking.setTextColor(Color.parseColor("#F59E0B"))
-                imgStatusIcon.setColorFilter(Color.parseColor("#F59E0B"))
-                tvMetodePembayaran.text = "Belum Dibayar"
-                tvPaymentNote.text = "Selesaikan pembayaran untuk mengonfirmasi booking"
-                btnBayarSekarang.text = "Bayar Sekarang"
-                btnBayarSekarang.isEnabled = true
-            }
+        if (paymentStatus == "Sudah Dibayar") {
+            tvStatusBooking.text = "Sudah Dibayar"
+            tvStatusBooking.setTextColor(Color.parseColor("#10B981"))
+            imgStatusIcon.setColorFilter(Color.parseColor("#10B981"))
+
+            tvMetodePembayaran.text = metodePembayaran
+            tvPaymentNote.text = "Pembayaran berhasil diverifikasi"
+
+            btnBayarSekarang.text = "Pembayaran Selesai"
+            btnBayarSekarang.isEnabled = false
+        } else {
+            tvStatusBooking.text = "Menunggu Pembayaran"
+            tvStatusBooking.setTextColor(Color.parseColor("#F59E0B"))
+            imgStatusIcon.setColorFilter(Color.parseColor("#F59E0B"))
+
+            tvMetodePembayaran.text = "Belum Dibayar"
+            tvPaymentNote.text = "Selesaikan pembayaran untuk mengonfirmasi booking"
+
+            btnBayarSekarang.text = "Bayar Sekarang"
+            btnBayarSekarang.isEnabled = true
         }
     }
 
@@ -172,18 +146,22 @@ class DetailBookingActivity : AppCompatActivity() {
         }
 
         btnBayarSekarang.setOnClickListener {
-            if (paymentStatus != "unpaid") return@setOnClickListener
+            if (paymentStatus == "Sudah Dibayar") return@setOnClickListener
 
             val paymentIntent = Intent(this, PaymentMethodActivity::class.java)
-            paymentIntent.putExtra("BOOKING_ID", bookingId)
+            paymentIntent.putExtras(intent)
             paymentIntent.putExtra("TOTAL_HARGA", totalHarga)
             paymentIntent.putExtra("KODE_BOOKING", kodeBooking)
+            paymentIntent.putExtra("TOKEN_TIKET", tokenTiket)
+
+
+
             startActivity(paymentIntent)
         }
     }
 
-    private fun formatRupiah(value: Double): String {
-        val formatRupiah = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"))
+    private fun formatRupiah(value: Int): String {
+        val formatRupiah = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
         return formatRupiah.format(value).replace(",00", "")
     }
 }
