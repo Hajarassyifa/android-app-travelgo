@@ -11,7 +11,7 @@ object ApiClient {
     // ─── KONFIGURASI IP ADDRESS (SUDAH DITAMBAHKAN /api/) ───────────
     // Cek IP PC kamu dengan mengetik 'ipconfig' di Command Prompt (CMD)
     private const val BASE_URL_EMULATOR = "http://10.0.2.2:8000/api/"
-    private const val BASE_URL_DEVICE   = "http://192.168.100.12:8000/api/" // ← Sesuai IP WiFi Laptop/PC kamu
+    private const val BASE_URL_DEVICE   = "http://10.128.61.56:8000/api/" // ← Sesuai IP WiFi Laptop/PC kamu
 
     // ─── AKTIFKAN SESUAI UNIT PERANGKAT YANG KAMU GUNAKAN ────────────
     // private const val BASE_URL = BASE_URL_EMULATOR  // Aktifkan jika pakai Emulator bawaan

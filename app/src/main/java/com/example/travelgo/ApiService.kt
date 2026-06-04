@@ -17,10 +17,11 @@ interface ApiService {
 
 
     // ======================
-    // DESTINASI
+    // DESTINASI (Ditambahkan Token Pengaman)
     // ======================
     @GET("destinasi")
     fun getDestinasis(
+        @Header("Authorization") token: String?,
         @Query("page") page: Int,
         @Query("kategori") kategori: String?,
         @Query("search") search: String?
@@ -28,15 +29,17 @@ interface ApiService {
 
     @GET("destinasi/{id}")
     fun getDestinasiById(
+        @Header("Authorization") token: String?,
         @Path("id") id: Int
     ): Call<DestinasiDetailResponse>
 
 
     // ======================
-    // ARTIKEL
+    // ARTIKEL (Ditambahkan Token Pengaman)
     // ======================
     @GET("artikel")
     fun getArtikels(
+        @Header("Authorization") token: String?,
         @Query("page") page: Int,
         @Query("kategori") kategori: String?,
         @Query("search") search: String?
@@ -44,6 +47,7 @@ interface ApiService {
 
     @GET("artikel/{id}")
     fun getArtikelDetail(
+        @Header("Authorization") token: String?,
         @Path("id") id: Int
     ): Call<ArtikelDetailResponse>
 
@@ -53,29 +57,14 @@ interface ApiService {
     // ======================
     @GET("booking")
     fun getBookings(
-        @Header("Authorization") token: String? = null
+        @Header("Authorization") token: String?
     ): Call<BookingListResponse>
-
-    @GET("booking")
-    fun getBookingList(
-        @Header("Authorization") token: String? = null
-    ): Call<BookingListResponse>
-
-    @GET("booking/{id}")
-    fun getBookingDetail(
-        @Path("id") id: Int
-    ): Call<BookingDetailResponse>
 
     @GET("booking/{id}")
     fun getBookingDetail(
         @Header("Authorization") token: String?,
         @Path("id") id: Int
     ): Call<BookingDetailResponse>
-
-    @POST("booking")
-    fun createBooking(
-        @Body request: BookingRequest
-    ): Call<BookingCreateResponse>
 
     @POST("booking")
     fun createBooking(
@@ -89,14 +78,18 @@ interface ApiService {
     // ======================
     @POST("transaksi")
     fun createTransaksi(
+        @Header("Authorization") token: String?,
         @Body request: TransaksiRequest
     ): Call<BaseResponse>
 
     @GET("transaksi")
-    fun getTransaksiList(): Call<TransaksiListResponse>
+    fun getTransaksiList(
+        @Header("Authorization") token: String?
+    ): Call<TransaksiListResponse>
 
     @GET("transaksi/{id}")
     fun getTransaksiDetail(
+        @Header("Authorization") token: String?,
         @Path("id") id: Int
     ): Call<TransaksiDetailResponse>
 
@@ -106,33 +99,18 @@ interface ApiService {
     // ======================
     @GET("review")
     fun getReviews(
-        @Header("Authorization") token: String? = null
+        @Header("Authorization") token: String?
     ): Call<ReviewListResponse>
 
     @GET("my-review")
     fun getMyReviews(
-        @Header("Authorization") token: String? = null
+        @Header("Authorization") token: String?
     ): Call<ReviewListResponse>
-
-    @GET("review")
-    fun getReviewList(): Call<ReviewListResponse>
 
     @POST("review")
     fun createReview(
-        @Header("Authorization") token: String,
-        @Query("package_id") packageId: Int,
-        @Body body: Map<String, String>
-    ): Call<ReviewResponse>
-
-    @POST("review")
-    fun postReview(
+        @Header("Authorization") token: String?,
         @Body request: ReviewRequest
-    ): Call<ReviewResponse>
-
-    @PUT("review/{id}")
-    fun updateReview(
-        @Path("id") id: Int,
-        @Body body: Map<String, String>
     ): Call<ReviewResponse>
 
     @PUT("review/{id}")
@@ -141,11 +119,6 @@ interface ApiService {
         @Path("id") id: Int,
         @Body body: Map<String, String>
     ): Call<ReviewResponse>
-
-    @DELETE("review/{id}")
-    fun deleteReview(
-        @Path("id") id: Int
-    ): Call<BaseResponse>
 
     @DELETE("review/{id}")
     fun deleteReview(
@@ -158,33 +131,14 @@ interface ApiService {
     // PROFILE
     // ======================
     @GET("profile")
-    fun getProfile(): Call<ProfileResponse>
-
-    @GET("profile")
     fun getProfile(
         @Header("Authorization") token: String?
-    ): Call<ProfileResponse>
-
-    @POST("profile/update-name")
-    fun updateName(
-        @Body request: UpdateNameRequest
-    ): Call<BaseResponse>
-
-    @PUT("profile")
-    fun updateProfile(
-        @Body request: UpdateProfileRequest
     ): Call<ProfileResponse>
 
     @PUT("profile")
     fun updateProfile(
         @Header("Authorization") token: String?,
         @Body request: UpdateProfileRequest
-    ): Call<ProfileResponse>
-
-    @Multipart
-    @POST("profile/photo")
-    fun updatePhoto(
-        @Part photo: MultipartBody.Part
     ): Call<ProfileResponse>
 
     @Multipart
@@ -200,22 +154,14 @@ interface ApiService {
     // ======================
     @GET("notifications")
     fun getNotifications(
-        @Header("Authorization") token: String? = null
+        @Header("Authorization") token: String?
     ): Call<NotificationListResponse>
-
-    @POST("notifications/{id}/read")
-    fun markNotificationRead(
-        @Path("id") id: Int
-    ): Call<BaseResponse>
 
     @POST("notifications/{id}/read")
     fun markNotificationRead(
         @Header("Authorization") token: String?,
         @Path("id") id: Int
     ): Call<BaseResponse>
-
-    @POST("notifications/read-all")
-    fun markAllNotificationsRead(): Call<BaseResponse>
 
     @POST("notifications/read-all")
     fun markAllNotificationsRead(
