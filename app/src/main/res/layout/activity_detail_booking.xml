@@ -31,6 +31,7 @@
                 android:textSize="18sp" />
         </RelativeLayout>
 
+        <!-- Status Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
+        <!-- Kode Booking Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,13 +131,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="TRV123456789"
+                        android:text="-"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
                 </LinearLayout>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Destinasi & Pemesan Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,59 +150,128 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="15dp">
 
-                <ImageView
-                    android:id="@+id/imgDestinasi"
-                    android:layout_width="105dp"
-                    android:layout_height="105dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_onboarding1" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgDestinasi"
+                        android:layout_width="105dp"
+                        android:layout_height="105dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_onboarding1" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvNamaPemesan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="-"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Destinasi"
+                            android:textColor="#6B7280"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvNamaDestinasi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="-"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvLokasiDestinasi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textColor="#6B7280"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Informasi Pemesan Tambahan -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="12dp"
+                    android:background="#EEEEEE" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Informasi Pemesan"
+                    android:textColor="#6B7280"
+                    android:textSize="13sp" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvNamaPemesan"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="Traveler"
-                        android:textSize="16sp"
-                        android:textColor="@color/black"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Destinasi"
+                        android:text="Email"
                         android:textColor="#6B7280"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tvNamaDestinasi"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvEmailPemesan"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_bold"
-                        android:text="Bali, Indonesia"
+                        android:layout_weight="1"
+                        android:text="-"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvKategori"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="Pantai"
+                        android:text="No. HP"
                         android:textColor="#6B7280"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvNoHpPemesan"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textColor="@color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Detail Perjalanan Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -273,55 +344,6 @@
                     <LinearLayout
                         android:layout_width="46dp"
                         android:layout_height="46dp"
-                        android:background="@drawable/bg_icon_orange"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:src="@drawable/ic_calendar"
-                            app:tint="#F59E0B" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tanggal Kembali"
-                            android:textColor="#6B7280"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tvTanggalKembali"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="-"
-                            android:textColor="@color/black"
-                            android:textSize="17sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="14dp"
-                    android:background="#EEEEEE" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="46dp"
-                        android:layout_height="46dp"
                         android:background="@drawable/bg_icon_green"
                         android:gravity="center">
 
@@ -341,7 +363,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Jumlah Orang"
+                            android:text="Jumlah Tiket"
                             android:textColor="#6B7280"
                             android:textSize="14sp" />
 
@@ -390,7 +412,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Harga per Orang"
+                            android:text="Harga per Tiket"
                             android:textColor="#6B7280"
                             android:textSize="14sp" />
 
@@ -407,6 +429,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Total Harga Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="74dp"
@@ -448,6 +471,7 @@
                 android:textSize="22sp" />
         </LinearLayout>
 
+        <!-- Metode Pembayaran Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -494,7 +518,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="Belum Dipilih"
+                        android:text="Belum Dibayar"
                         android:textColor="@color/black"
                         android:textSize="17sp" />
 
@@ -509,6 +533,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Button Bayar -->
         <Button
             android:id="@+id/btnBayarSekarang"
             android:layout_width="match_parent"

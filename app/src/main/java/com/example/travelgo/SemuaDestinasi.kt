@@ -49,20 +49,26 @@ class SemuaDestinasi : AppCompatActivity() {
         RetrofitClient.instance.getDestinasiList().enqueue(object : Callback<DestinasiResponse> {
             override fun onResponse(call: Call<DestinasiResponse>, response: Response<DestinasiResponse>) {
                 if (response.isSuccessful) {
-                    val data = response.body()?.data
-                    if (data != null) {
-                        listWisata.clear()
-                        listWisata.addAll(data)
+                    val body = response.body()
+                    if (body?.success == true) {
+                        val data = body.data
+                        if (data.isNotEmpty()) {
+                            listWisata.clear()
+                            listWisata.addAll(data)
 
-                        setupHorizontalRV(rvPantai, "Pantai")
-                        setupHorizontalRV(rvGunung, "Gunung")
-                        setupHorizontalRV(rvSejarah, "Sejarah")
-                        setupHorizontalRV(rvKuliner, "Kuliner")
+                            setupHorizontalRV(rvPantai, "Pantai")
+                            setupHorizontalRV(rvGunung, "Gunung")
+                            setupHorizontalRV(rvSejarah, "Sejarah")
+                            setupHorizontalRV(rvKuliner, "Kuliner")
 
-                        setDefaultTab()
+                            setDefaultTab()
+                        } else {
+                            prepareDataDummy()
+                        }
+                    } else {
+                        prepareDataDummy()
                     }
                 } else {
-                    Toast.makeText(this@SemuaDestinasi, "Gagal memuat data", Toast.LENGTH_SHORT).show()
                     prepareDataDummy()
                 }
             }
@@ -91,15 +97,7 @@ class SemuaDestinasi : AppCompatActivity() {
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    0 -> mainScrollView.smoothScrollTo(0, 0)
-                    1 -> scrollToSection(R.id.sectionPantai)
-                    2 -> scrollToSection(R.id.sectionGunung)
-                    3 -> scrollToSection(R.id.sectionSejarah)
-                    4 -> scrollToSection(R.id.sectionKuliner)
-                }
-            }
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
 
@@ -123,22 +121,28 @@ class SemuaDestinasi : AppCompatActivity() {
     }
 
     private fun setupHorizontalRV(recyclerView: RecyclerView, kategori: String) {
-        val filteredList = ArrayList(listWisata.filter { it.kategori == kategori })
+        val filteredList = ArrayList(listWisata.filter {
+            it.description?.contains(kategori, ignoreCase = true) == true ||
+                    it.name.contains(kategori, ignoreCase = true)
+        })
+
+        val finalList = if (filteredList.isEmpty()) listWisata else filteredList
+
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.adapter = DestinasiAdapter(filteredList)
+        recyclerView.adapter = DestinasiAdapter(finalList)
         recyclerView.isNestedScrollingEnabled = false
     }
 
     private fun prepareDataDummy() {
         listWisata.clear()
-        listWisata.add(Destinasi(1, "Bali", "Indonesia", "Keindahan alam.", "Rp 1.250.000", "Pantai", R.drawable.img_onboarding1))
-        listWisata.add(Destinasi(2, "Labuan Bajo", "NTT", "Komodo island.", "Rp 2.150.000", "Pantai", R.drawable.img_onboarding2))
-        listWisata.add(Destinasi(3, "Bromo", "Jawa Timur", "Sunrise View.", "Rp 950.000", "Gunung", R.drawable.img_onboarding3))
-        listWisata.add(Destinasi(4, "Rinjani", "Lombok", "Pendakian indah.", "Rp 1.850.000", "Gunung", R.drawable.img_onboarding1))
-        listWisata.add(Destinasi(5, "Borobudur", "Jawa Tengah", "Candi megah.", "Rp 350.000", "Sejarah", R.drawable.img_onboarding2))
-        listWisata.add(Destinasi(6, "Kota Tua", "Jakarta", "Wisata sejarah.", "Rp 200.000", "Sejarah", R.drawable.img_onboarding3))
-        listWisata.add(Destinasi(7, "Gudeg Jogja", "Yogyakarta", "Manis gurih.", "Rp 60.000", "Kuliner", R.drawable.img_onboarding1))
-        listWisata.add(Destinasi(8, "Sate Madura", "Madura", "Bumbu kacang.", "Rp 35.000", "Kuliner", R.drawable.img_onboarding2))
+        listWisata.add(Destinasi(1, "Pantai Kuta", "Bali", 1250000.0, null, "Pantai indah di Bali", 4.5))
+        listWisata.add(Destinasi(2, "Labuan Bajo", "NTT", 2150000.0, null, "Pantai eksotis dengan pulau Komodo", 4.7))
+        listWisata.add(Destinasi(3, "Gunung Bromo", "Jawa Timur", 950000.0, null, "Gunung dengan sunrise terbaik", 4.8))
+        listWisata.add(Destinasi(4, "Gunung Rinjani", "Lombok", 1850000.0, null, "Gunung dengan pemandangan indah", 4.6))
+        listWisata.add(Destinasi(5, "Candi Borobudur", "Jawa Tengah", 350000.0, null, "Candi Buddha terbesar di dunia", 4.9))
+        listWisata.add(Destinasi(6, "Kota Tua Jakarta", "Jakarta", 200000.0, null, "Wisata sejarah dengan bangunan lawas", 4.3))
+        listWisata.add(Destinasi(7, "Gudeg Jogja", "Yogyakarta", 60000.0, null, "Kuliner khas Yogyakarta", 4.5))
+        listWisata.add(Destinasi(8, "Sate Madura", "Madura", 35000.0, null, "Kuliner sate dengan bumbu kacang", 4.4))
 
         setupHorizontalRV(rvPantai, "Pantai")
         setupHorizontalRV(rvGunung, "Gunung")
