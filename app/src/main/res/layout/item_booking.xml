@@ -1,62 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvBookingCode"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:text="Kode Booking" />
 
-        <TextView
-            android:id="@+id/tvBookingCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvDestinasiName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Destinasi" />
 
-        <TextView
-            android:id="@+id/tvDestinasiName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvTanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tanggal" />
 
-        <TextView
-            android:id="@+id/tvTanggal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/tvJumlahTiket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Tiket" />
 
-        <TextView
-            android:id="@+id/tvJumlahTiket"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/tvTotalHarga"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Harga" />
 
-        <TextView
-            android:id="@+id/tvTotalHarga"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#4CAF50" />
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status" />
 
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="4dp"
-            android:textSize="12sp"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

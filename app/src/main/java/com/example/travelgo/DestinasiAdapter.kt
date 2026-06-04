@@ -25,21 +25,21 @@ class DestinasiAdapter(
     override fun getItemCount(): Int = destinasiList.size
 
     class DestinasiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivGambar: ImageView = itemView.findViewById(R.id.ivGambar)
-        private val tvNama: TextView = itemView.findViewById(R.id.tvNama)
-        private val tvLokasi: TextView = itemView.findViewById(R.id.tvLokasi)
-        private val tvHarga: TextView = itemView.findViewById(R.id.tvHarga)
+        private val ivImage: ImageView = itemView.findViewById(R.id.ivDestinasiImage)
+        private val tvName: TextView = itemView.findViewById(R.id.tvDestinasiName)
+        private val tvLocation: TextView = itemView.findViewById(R.id.tvDestinasiLocation)
+        private val tvPrice: TextView = itemView.findViewById(R.id.tvDestinasiPrice)
 
         fun bind(destinasi: Destinasi) {
-            tvNama.text = destinasi.name
-            tvLokasi.text = destinasi.location
-            tvHarga.text = "Rp ${destinasi.price}"
+            tvName.text = destinasi.name
+            tvLocation.text = destinasi.location
+            tvPrice.text = "Rp ${destinasi.price}"
 
             Glide.with(itemView.context)
                 .load(destinasi.image)
                 .placeholder(android.R.color.darker_gray)
                 .error(android.R.color.holo_red_light)
-                .into(ivGambar)
+                .into(ivImage)
         }
     }
 }

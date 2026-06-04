@@ -1,6 +1,7 @@
 package com.example.travelgo
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,22 +25,32 @@ class MyTicketActivity : AppCompatActivity() {
         bookingAdapter = BookingAdapter(bookingList)
         rvBookings.adapter = bookingAdapter
 
+        // Pakai ImageView bukan ImageButton
+        findViewById<ImageView?>(R.id.btnBack)?.setOnClickListener { finish() }
+
         getMyBookings()
     }
 
     private fun getMyBookings() {
-        RetrofitClient.instance.getBookings()
+        val token = SessionManager.getToken(this)
+        if (token == null) {
+            Toast.makeText(this, "Silakan login terlebih dahulu", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        ApiClient.apiService.getBookings("Bearer $token")
             .enqueue(object : Callback<BookingListResponse> {
-                override fun onResponse(
-                    call: Call<BookingListResponse>,
-                    response: Response<BookingListResponse>
-                ) {
+                override fun onResponse(call: Call<BookingListResponse>, response: Response<BookingListResponse>) {
                     if (response.isSuccessful) {
                         val body = response.body()
-                        if (body?.success == true) {
+                        if (body?.status == true) {
                             bookingList.clear()
                             bookingList.addAll(body.data)
                             bookingAdapter.notifyDataSetChanged()
+                            if (bookingList.isEmpty()) {
+                                Toast.makeText(this@MyTicketActivity, "Belum ada booking", Toast.LENGTH_SHORT).show()
+                            }
                         } else {
                             Toast.makeText(this@MyTicketActivity, body?.message ?: "Gagal", Toast.LENGTH_SHORT).show()
                         }
@@ -47,7 +58,6 @@ class MyTicketActivity : AppCompatActivity() {
                         Toast.makeText(this@MyTicketActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
-
                 override fun onFailure(call: Call<BookingListResponse>, t: Throwable) {
                     Toast.makeText(this@MyTicketActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                 }

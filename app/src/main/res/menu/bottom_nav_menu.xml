@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/nav_beranda"
-        android:icon="@drawable/ic_home"
+        android:icon="@android:drawable/ic_menu_today"
         android:title="Beranda" />
+
     <item
         android:id="@+id/nav_destinasi"
-        android:icon="@drawable/ic_location"
+        android:icon="@android:drawable/ic_menu_mapmode"
         android:title="Destinasi" />
+
     <item
         android:id="@+id/nav_booking"
-        android:icon="@drawable/ic_booking"
+        android:icon="@android:drawable/ic_menu_agenda"
         android:title="Booking" />
+
     <item
         android:id="@+id/nav_artikel"
-        android:icon="@drawable/ic_article"
+        android:icon="@android:drawable/ic_menu_info_details"
         android:title="Artikel" />
+
     <item
         android:id="@+id/nav_akun"
-        android:icon="@drawable/ic_user"
+        android:icon="@android:drawable/ic_menu_myplaces"
         android:title="Akun" />
+
 </menu>
