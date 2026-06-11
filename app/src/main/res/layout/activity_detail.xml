@@ -76,6 +76,18 @@
                     android:fontFamily="@font/poppins_regular"
                     android:lineSpacingExtra="4dp"
                     android:text="Deskripsi lengkap mengenai tempat wisata ini akan muncul di sini secara dinamis..." />
+                <Button
+                    android:id="@+id/btnReview"
+                    android:layout_width="160dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="#6C63FF"
+                    android:text="Lihat Ulasan"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="15dp" />
+
 
             </LinearLayout>
         </LinearLayout>
@@ -111,6 +123,7 @@
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
             </LinearLayout>
+
 
             <Button
                 android:id="@+id/btnBooking"

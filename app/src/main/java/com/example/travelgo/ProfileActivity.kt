@@ -47,13 +47,47 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupMenu(id: Int, icon: Int, title: String) {
+
         val menu = findViewById<LinearLayout>(id)
 
-        menu.findViewById<ImageView>(R.id.imgMenuIcon).setImageResource(icon)
-        menu.findViewById<TextView>(R.id.tvMenuTitle).text = title
+        menu.findViewById<ImageView>(R.id.imgMenuIcon)
+            .setImageResource(icon)
+
+        menu.findViewById<TextView>(R.id.tvMenuTitle)
+            .text = title
 
         menu.setOnClickListener {
-            Toast.makeText(this, title, Toast.LENGTH_SHORT).show()
+
+            when (title) {
+
+                "Pengaturan" -> {
+
+                    startActivity(
+                        Intent(this, EditProfileActivity::class.java)
+                    )
+                }
+
+                "Booking Saya" -> {
+
+                    startActivity(
+                        Intent(this, MyTicketActivity::class.java)
+                    )
+                }
+                "Notifikasi" -> {
+                    startActivity(
+                        Intent(this, NotifikasiActivity::class.java)
+                    )
+                }
+
+                else -> {
+
+                    Toast.makeText(
+                        this,
+                        title,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 

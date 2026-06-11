@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class DetailActivity : AppCompatActivity() {
 
+    private var idDestinasi = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -22,11 +24,14 @@ class DetailActivity : AppCompatActivity() {
 
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
         val btnBooking = findViewById<Button>(R.id.btnBooking)
+        val btnReview = findViewById<Button>(R.id.btnReview)
 
-        val nama = intent.getStringExtra("NAMA_DESTINASI")
-        val lokasi = intent.getStringExtra("LOKASI_DESTINASI")
-        val harga = intent.getStringExtra("HARGA_DESTINASI")
-        val gambar = intent.getIntExtra("GAMBAR_DESTINASI", 0)
+        idDestinasi = intent.getIntExtra("ID_DESTINASI", 0)
+
+        val nama = intent.getStringExtra("NAMA_DESTINASI") ?: "-"
+        val lokasi = intent.getStringExtra("LOKASI_DESTINASI") ?: "-"
+        val harga = intent.getStringExtra("HARGA_DESTINASI") ?: "-"
+        val gambar = intent.getIntExtra("GAMBAR_DESTINASI", R.drawable.img_onboarding1)
 
         tvNama.text = nama
         tvLokasi.text = lokasi
@@ -41,15 +46,21 @@ class DetailActivity : AppCompatActivity() {
         }
 
         btnBooking.setOnClickListener {
+            val bookingIntent = Intent(this, BookingActivity::class.java)
 
-            val intent = Intent(this, BookingActivity::class.java)
+            bookingIntent.putExtra("ID_DESTINASI", idDestinasi)
+            bookingIntent.putExtra("NAMA_DESTINASI", nama)
+            bookingIntent.putExtra("LOKASI_DESTINASI", lokasi)
+            bookingIntent.putExtra("HARGA_DESTINASI", harga)
+            bookingIntent.putExtra("GAMBAR_DESTINASI", gambar)
 
-            intent.putExtra("NAMA_DESTINASI", nama)
-            intent.putExtra("LOKASI_DESTINASI", lokasi)
-            intent.putExtra("HARGA_DESTINASI", harga)
-            intent.putExtra("GAMBAR_DESTINASI", gambar)
+            startActivity(bookingIntent)
+        }
 
-            startActivity(intent)
+        btnReview.setOnClickListener {
+            val reviewIntent = Intent(this, ReviewActivity::class.java)
+            reviewIntent.putExtra("PACKAGE_ID", idDestinasi)
+            startActivity(reviewIntent)
         }
     }
 }
