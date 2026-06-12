@@ -1,13 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-
 }
 
 android {
     namespace = "com.example.travelgo"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.travelgo"
@@ -34,6 +31,10 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -47,6 +48,10 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("com.tbuonomo:dotsindicator:5.0") // Library opsional agar titik indikator lebih cantik
+    implementation("com.tbuonomo:dotsindicator:5.0")
 
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
